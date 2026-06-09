@@ -26,6 +26,7 @@
 | Release pack | 已完成 | `src/scripts/release-pack.ts`、`npm run release:pack` |
 | GitHub CI | 已完成 | `.github/workflows/ci.yml` |
 | GitHub tag source archive | 已完成 | `.github/workflows/release-source.yml` |
+| Release notes | 已完成 | `docs/releases/v0.1.0-alpha.md` |
 | 私钥不入仓库 | 已检查 | `.env` 被 `.gitignore` 忽略，`.env.example` 只有占位符 |
 
 ## 2. 已执行的本地验证
@@ -99,7 +100,8 @@ git push origin v0.1.0-alpha
 3. License 页显示非商用许可。
 4. GitHub Actions 的 `CI` workflow 能运行 `npm ci`、`npm run build`、`npm run check`。
 5. GitHub Actions 的 `release-source` workflow 能在 tag 上上传 source archive artifact。
-6. README 中 demo 指标和 `docs/demo-benchmark-report-cn.md` 一致。
+6. GitHub Release 文案可以使用 `docs/releases/v0.1.0-alpha.md`。
+7. README 中 demo 指标和 `docs/demo-benchmark-report-cn.md` 一致。
 
 ## 6. Alpha 发布说明建议
 

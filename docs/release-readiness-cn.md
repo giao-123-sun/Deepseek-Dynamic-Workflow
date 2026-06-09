@@ -23,6 +23,7 @@
 16. Demo structured handoff：`cf-dw.structured-handoff.v1`，并由 release audit 检查。
 17. Release pack runner：`npm run release:pack`，使用 `git archive HEAD` 生成源码发布包。
 18. GitHub tag source archive workflow：`.github/workflows/release-source.yml`。
+19. GitHub release notes：`docs/releases/v0.1.0-alpha.md`。
 
 ## 本地验证
 
