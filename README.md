@@ -91,16 +91,18 @@ Implemented locally:
 - `cf-dw-prefix`: Repomix-powered stable prefix builder.
 - `cf-dw-report`: cache/token usage reports from run ledgers.
 - `cf-dw-dashboard`: static workflow execution dashboard.
+- `cf-dw-release-audit`: release gate verifier for files, demos, ReasoniX artifacts, and cache hit rate.
 - ODW real-run demos through both Native C-FDW and ReasoniX backends.
 
 Verified release-demo metrics:
 
 ```text
-demo workflows = 5
-agents         = 23
-cache hit      = 200,336 tokens
-cache miss     = 24,214 tokens
-hit rate       = 89.22%
+demo workflows  = 5
+agents          = 23
+reasonix agents = 20
+cache hit       = 206,336 tokens
+cache miss      = 24,214 tokens
+hit rate        = 89.50%
 ```
 
 See [docs/demo-benchmark-report-cn.md](./docs/demo-benchmark-report-cn.md).
@@ -247,7 +249,7 @@ The release target is five practical demos:
 | Demo | Backend | Purpose | Metrics |
 |---|---|---|---|
 | [Cache ROI Benchmark](./examples/demos/cache-roi-benchmark.js) | Native + ReasoniX | Run a stable workflow shape and define cold/warm cache gates. | 96.50% cache hit |
-| [Codebase Architecture Audit](./examples/demos/codebase-architecture-audit.js) | Native + ReasoniX | Parallel agents inspect modules and synthesize a release report. | 87.65% cache hit |
+| [Codebase Architecture Audit](./examples/demos/codebase-architecture-audit.js) | Native + ReasoniX | Parallel agents inspect modules and synthesize a release report. | 88.42% cache hit |
 | [Policy / Legal Conflict Mining](./examples/demos/policy-conflict-mining.js) | ReasoniX | Multi-phase rule extraction, comparison, and conflict scoring. | 88.79% cache hit |
 | [Multi-City Deep Research](./examples/demos/multi-city-deep-research.js) | ReasoniX | City/domain fan-out, normalization, comparison, report outline. | 85.16% cache hit |
 | [Web/CDP Evidence Extraction](./examples/demos/web-cdp-evidence-extraction.js) | ReasoniX, CDP-ready | Browser evidence playbooks and future CDP artifact protocol. | 85.86% cache hit |
@@ -265,6 +267,12 @@ Regenerate latest-per-agent dashboards without running the live demos:
 
 ```bash
 npm run demo:dashboards
+```
+
+Verify the release gates from local files and real run artifacts:
+
+```bash
+npm run release:audit
 ```
 
 For the current design record, see

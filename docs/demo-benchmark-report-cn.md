@@ -15,27 +15,36 @@
 ```text
 demos        = 5
 agents       = 23
-cache hit    = 200,336 tokens
+reasonix     = 20 agents
+cache hit    = 206,336 tokens
 cache miss   = 24,214 tokens
-hit rate     = 89.22%
+hit rate     = 89.50%
 ```
 
 这说明当前 cache-first 策略在 demo suite 上已经达到 80-90%+ 的发布目标。
 
+当前最权威的复核命令是：
+
+```bash
+npm run release:audit
+```
+
+它不会读取本文档中的数字，而是直接扫描 `.cf-dw/runs` 的真实 session、usage ledger、ReasoniX transcript 和 `artifact-manifest.json`，并按 `latest-per-agent` 口径重新计算。
+
 ## 2. 实测结果
 
-| Demo | ODW run id | Agents | Cache hit | Cache miss | Hit rate | 后端 |
+| Demo | Audit scope | Agents | Cache hit | Cache miss | Hit rate | 后端 |
 |---|---:|---:|---:|---:|---:|---|
-| Cache ROI Benchmark | `20260610-034735-9218c2` | 3 | 49,280 | 1,786 | 96.50% | Native + ReasoniX |
-| Codebase Architecture Audit | `20260610-035735-72e1e5` | 4 | 79,376 | 11,185 | 87.65% | Native + ReasoniX |
-| Policy / Legal Conflict Mining | `20260610-035248-ea5db5` | 5 | 22,400 | 2,829 | 88.79% | ReasoniX |
-| Multi-City Deep Research | `20260610-035411-b59808` | 7 | 31,360 | 5,464 | 85.16% | ReasoniX |
-| Web/CDP Evidence Extraction | `20260610-035558-9eab49` | 4 | 17,920 | 2,950 | 85.86% | ReasoniX / CDP-ready |
+| Cache ROI Benchmark | latest-per-agent | 3 | 49,280 | 1,786 | 96.50% | Native + ReasoniX |
+| Codebase Architecture Audit | latest-per-agent | 4 | 85,376 | 11,185 | 88.42% | Native + ReasoniX |
+| Policy / Legal Conflict Mining | latest-per-agent | 5 | 22,400 | 2,829 | 88.79% | ReasoniX |
+| Multi-City Deep Research | latest-per-agent | 7 | 31,360 | 5,464 | 85.16% | ReasoniX |
+| Web/CDP Evidence Extraction | latest-per-agent | 4 | 17,920 | 2,950 | 85.86% | ReasoniX / CDP-ready |
 
 总体：
 
 ```text
-hit_rate = 200,336 / (200,336 + 24,214) = 89.22%
+hit_rate = 206,336 / (206,336 + 24,214) = 89.50%
 ```
 
 ## 3. 关键发现
@@ -176,7 +185,7 @@ or instructions for another agent.
 4. 架构图视觉资产。
 5. ODW mixed adapter。
 6. Native + ReasoniX 真实 demo suite。
-7. 5 个 demo 的 warm cache 综合命中率 89.22%。
+7. 5 个 demo 的 warm cache 综合命中率 89.50%。
 8. ReasoniX wrapper artifact manifest 初版。
 9. Dashboard `--run-id` / `--since` / `--latest-per-agent` 过滤。
 10. Dashboard artifact chips 与 backend chips。

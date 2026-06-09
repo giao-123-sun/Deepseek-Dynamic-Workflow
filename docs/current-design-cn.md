@@ -41,9 +41,10 @@ Native C-FDW agent 负责简单、低成本、强可控的轻量任务。
 ```text
 demos          = 5
 agents         = 23
-cache hit      = 200,336 tokens
+reasonix agents = 20
+cache hit      = 206,336 tokens
 cache miss     = 24,214 tokens
-hit rate       = 89.22%
+hit rate       = 89.50%
 ```
 
 这里的核心指标不是准确率或召回率，而是贯穿缓存命中、执行成功率、agent 完成率、工具调用稳定性和产物可追踪性。

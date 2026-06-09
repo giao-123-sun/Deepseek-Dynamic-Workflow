@@ -19,6 +19,7 @@
 12. Dashboard artifact chips 与 backend chips。
 13. Dashboard artifact preview panel，可展开预览文本类 artifact。
 14. Demo suite runner：`npm run demo:run` / `npm run demo:dashboards`。
+15. Release audit runner：`npm run release:audit`。
 
 ## 本地验证
 
@@ -33,9 +34,10 @@ Demo suite：
 ```text
 demos        = 5
 agents       = 23
-cache hit    = 200,336
+reasonix     = 20 agents
+cache hit    = 206,336
 cache miss   = 24,214
-hit rate     = 89.22%
+hit rate     = 89.50%
 ```
 
 ## 发布前仍建议完成
@@ -62,8 +64,8 @@ GitHub auth   = not available in this local shell
 ```text
 CFDW v0.1.0-alpha is a non-commercial source-available release candidate.
 It demonstrates cache-first dynamic workflows on ODW with Native C-FDW and
-ReasoniX backends. The five demo workflows reached 89.22% aggregate warm-cache
-hit rate in local testing.
+ReasoniX backends. The five demo workflows reached 89.50% aggregate warm-cache
+hit rate in local release audit.
 ```
 
 ## 不能在 CI 中做的事

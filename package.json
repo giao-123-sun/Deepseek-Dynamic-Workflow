@@ -10,7 +10,8 @@
     "cf-dw-reasonix-agent": "./dist/reasonix-agent.js",
     "cf-dw-report": "./dist/report.js",
     "cf-dw-dashboard": "./dist/dashboard.js",
-    "cf-dw-demo-suite": "./dist/scripts/demo-suite.js"
+    "cf-dw-demo-suite": "./dist/scripts/demo-suite.js",
+    "cf-dw-release-audit": "./dist/scripts/release-audit.js"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
@@ -23,6 +24,7 @@
     "demo:list": "node ./dist/scripts/demo-suite.js --mode list",
     "demo:dashboards": "node ./dist/scripts/demo-suite.js --mode dashboards",
     "demo:run": "node ./dist/scripts/demo-suite.js --mode run",
+    "release:audit": "node ./dist/scripts/release-audit.js",
     "probe:cache": "node ./dist/scripts/cache-probe.js"
   },
   "devDependencies": {
