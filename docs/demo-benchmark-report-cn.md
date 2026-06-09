@@ -178,14 +178,16 @@ or instructions for another agent.
 6. Native + ReasoniX 真实 demo suite。
 7. 5 个 demo 的 warm cache 综合命中率 89.22%。
 8. ReasoniX wrapper artifact manifest 初版。
+9. Dashboard `--run-id` / `--since` / `--latest-per-agent` 过滤。
+10. Dashboard artifact chips 与 backend chips。
+11. Demo suite runner：`npm run demo:run` / `npm run demo:dashboards`。
 
 仍需继续：
 
-1. Dashboard 支持 `--run-id` / `--since`，避免同 tag 多次 run 混在一起。
-2. Dashboard 读取 `artifact-manifest.json` 并展示 artifact panel。
-3. 将 synthesis 阶段从拼接自然语言改为读取结构化 artifact。
-4. 接入真实 CDP browser executor，而不仅是 CDP-ready protocol demo。
-5. 增加自动化 demo runner，避免手动逐个运行。
+1. Dashboard 将 artifact chips 升级为完整 artifact panel，可展开预览文本/图片。
+2. 将 synthesis 阶段从拼接自然语言改为读取结构化 artifact。
+3. 接入真实 CDP browser executor，而不仅是 CDP-ready protocol demo。
+4. 推送到 GitHub remote，并在 GitHub 页面确认 README 图片显示正常。
 
 ## 6. 发布建议
 
@@ -193,7 +195,8 @@ or instructions for another agent.
 
 ```text
 Web/CDP demo 当前是 CDP-ready protocol demo，不是 live browser execution。
-Artifact-aware adapter 已有 ReasoniX manifest 初版，但 dashboard artifact panel 尚未完成。
+Artifact-aware adapter 已有 ReasoniX manifest 初版，dashboard 当前展示 artifact chips，
+完整 artifact panel 尚未完成。
 ```
 
 如果要作为更完整的 v0.1.0 发布，建议先完成 dashboard artifact panel 和 run-id 过滤。

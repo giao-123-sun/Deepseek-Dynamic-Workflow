@@ -270,29 +270,37 @@ npm run demo:dashboards
 For the current design record, see
 [docs/current-design-cn.md](./docs/current-design-cn.md).
 
+For the GitHub release checklist, see
+[docs/github-publish-checklist-cn.md](./docs/github-publish-checklist-cn.md).
+
 ## Run Artifacts
 
-Each agent writes under:
+Each Native C-FDW agent writes under:
 
 ```text
 <cwd>/.cf-dw/runs/<session_id>/
-  result.txt
+  session.json
+  usage.jsonl
+```
+
+Each ReasoniX harness agent writes the same observable run envelope plus
+artifact-aware handoff files:
+
+```text
+<cwd>/.cf-dw/runs/<session_id>/
   session.json
   usage.jsonl
   reasonix-transcript.jsonl
-```
-
-The planned artifact-aware adapter will add:
-
-```text
+  result.txt
   result.json
   artifact-manifest.json
   artifacts/
-    notes.md
-    findings.json
-    evidence/
-    screenshots/
+    summary.md
 ```
+
+The next implementation stage is to make downstream phases consume structured
+`artifact-manifest.json` entries directly instead of concatenating variable
+natural-language stdout.
 
 ## Reports
 
@@ -300,6 +308,7 @@ The planned artifact-aware adapter will add:
 - [C-FDW Adapter MVP 测试记录](./docs/mvp-test-record-cn.md)
 - [CFDW 五个 Demo 实测 Benchmark 报告](./docs/demo-benchmark-report-cn.md)
 - [CFDW GitHub 发布准备说明](./docs/release-readiness-cn.md)
+- [CFDW GitHub 发布执行清单](./docs/github-publish-checklist-cn.md)
 - [ODW + C-FDW 真实动态工作流运行报告](./docs/odw-real-run-report-cn.md)
 - [ReasoniX Harness 接入与试跑报告](./docs/reasonix-harness-run-report-cn.md)
 

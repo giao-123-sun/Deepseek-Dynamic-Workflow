@@ -39,10 +39,22 @@ hit rate     = 89.22%
 
 ## 发布前仍建议完成
 
-1. 初始化 Git 仓库并推送到 GitHub remote。
+1. 将本地 Git 仓库推送到 GitHub remote。
 2. 在 GitHub README 中确认图片路径 `assets/*.png` 正常显示。
-3. 将 artifact chips 升级为完整 artifact panel，可展开预览文本/图片。
-4. 接入真实 CDP browser executor。
+3. 将 dashboard 的 artifact chips 升级为完整 artifact panel，可展开预览文本/图片。
+4. 将跨阶段 synthesis prompt 从自然语言拼接升级为读取结构化 `artifact-manifest.json`。
+5. 接入真实 CDP browser executor。
+
+当前本地仓库状态：
+
+```text
+branch        = main
+latest commit = use `git log --oneline -1` to verify
+remote        = not configured
+GitHub auth   = not available in this local shell
+```
+
+因此，代码已达到本地发布候选状态，但“已经发布到 GitHub”仍需要配置 remote 并完成 GitHub 登录授权。
 
 ## 建议发布措辞
 
