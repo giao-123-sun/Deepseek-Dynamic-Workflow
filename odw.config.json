@@ -1,0 +1,32 @@
+{
+  "defaultAdapter": "cf_dw_deepseek",
+  "concurrency": 1,
+  "maxAgents": 12,
+  "workspaceMode": "inplace",
+  "timeout": 420,
+  "schemaRetries": 0,
+  "adapters": {
+    "cf_dw_deepseek": {
+      "label": "Cache-First DeepSeek Agent",
+      "command": [
+        "node",
+        "{source}/dist/index.js",
+        "--cwd",
+        "{source}",
+        "--prompt-file",
+        "{prompt_file}",
+        "--prefix-file",
+        "{source}/.cf-dw/prefix/cache-prefix.xml",
+        "--cache-group-id",
+        "cf_dw_odw_real_demo_v1",
+        "--session-id",
+        "auto",
+        "--max-turns",
+        "4",
+        "--temperature",
+        "0"
+      ],
+      "timeout": 420
+    }
+  }
+}

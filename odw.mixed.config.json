@@ -1,0 +1,59 @@
+{
+  "defaultAdapter": "cf_dw_reasonix",
+  "concurrency": 2,
+  "maxAgents": 24,
+  "workspaceMode": "inplace",
+  "timeout": 540,
+  "schemaRetries": 0,
+  "adapters": {
+    "cf_dw_deepseek": {
+      "label": "Native C-FDW DeepSeek Agent",
+      "command": [
+        "node",
+        "{source}/dist/index.js",
+        "--cwd",
+        "{source}",
+        "--prompt-file",
+        "{prompt_file}",
+        "--prefix-file",
+        "{source}/.cf-dw/prefix/cache-prefix.xml",
+        "--prefix-max-chars",
+        "12000",
+        "--cache-group-id",
+        "cf_dw_demo_suite_v1",
+        "--session-id",
+        "auto",
+        "--max-turns",
+        "4",
+        "--temperature",
+        "0"
+      ],
+      "timeout": 540
+    },
+    "cf_dw_reasonix": {
+      "label": "ReasoniX Harness Agent",
+      "command": [
+        "node",
+        "{source}/dist/reasonix-agent.js",
+        "--cwd",
+        "{source}",
+        "--prompt-file",
+        "{prompt_file}",
+        "--prefix-file",
+        "{source}/.cf-dw/prefix/cache-prefix.xml",
+        "--cache-group-id",
+        "cf_dw_demo_suite_v1",
+        "--session-id",
+        "auto",
+        "--model",
+        "deepseek-v4-flash",
+        "--effort",
+        "low",
+        "--budget",
+        "0.05",
+        "--no-proxy"
+      ],
+      "timeout": 540
+    }
+  }
+}

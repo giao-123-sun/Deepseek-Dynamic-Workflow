@@ -1,0 +1,23 @@
+{
+  "defaultAdapter": "cf_dw_deepseek",
+  "concurrency": 16,
+  "maxAgents": 1000,
+  "adapters": {
+    "cf_dw_deepseek": {
+      "label": "Cache-First DeepSeek Agent",
+      "command": [
+        "cf-dw-agent",
+        "--cwd",
+        "{workspace}",
+        "--prompt-file",
+        "{prompt_file}",
+        "--cache-group-id",
+        "{workflow_hash}",
+        "--session-id",
+        "{agent_id}",
+        "--max-turns",
+        "6"
+      ]
+    }
+  }
+}

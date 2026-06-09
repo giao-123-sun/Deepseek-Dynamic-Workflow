@@ -1,0 +1,37 @@
+{
+  "defaultAdapter": "cf_dw_reasonix",
+  "concurrency": 2,
+  "maxAgents": 8,
+  "workspaceMode": "inplace",
+  "timeout": 420,
+  "schemaRetries": 0,
+  "adapters": {
+    "cf_dw_reasonix": {
+      "label": "ReasoniX Harness Agent",
+      "command": [
+        "node",
+        "{source}/dist/reasonix-agent.js",
+        "--cwd",
+        "{source}",
+        "--prompt-file",
+        "{prompt_file}",
+        "--prefix-file",
+        "{source}/.cf-dw/prefix/cache-prefix.xml",
+        "--prefix-max-chars",
+        "12000",
+        "--cache-group-id",
+        "cf_dw_reasonix_odw_demo_v1",
+        "--session-id",
+        "auto",
+        "--model",
+        "deepseek-v4-flash",
+        "--effort",
+        "low",
+        "--budget",
+        "0.04",
+        "--no-proxy"
+      ],
+      "timeout": 420
+    }
+  }
+}

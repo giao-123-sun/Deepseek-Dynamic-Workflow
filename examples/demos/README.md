@@ -1,0 +1,32 @@
+# CFDW Demo Workflows
+
+These demos are plain ODW workflow scripts. They use stable `C_FDW_*` metadata so
+CFDW can aggregate phases, agents, cache metrics, and artifacts into the
+dashboard.
+
+Run one demo:
+
+```bash
+node ../../open-dynamic-workflows/dist/cli.js run ./examples/demos/cache-roi-benchmark.js \
+  --config ./odw.mixed.config.json \
+  --runs-root ./.odw/runs \
+  --wait \
+  --timeout 1200
+```
+
+Generate a dashboard after a run:
+
+```bash
+node dist/dashboard.js \
+  --runs-root ./.cf-dw/runs \
+  --workflow-tag demo-cache-roi-benchmark \
+  --output ./.cf-dw/reports/demo-cache-roi-benchmark.html
+```
+
+## Demo List
+
+1. `cache-roi-benchmark.js`
+2. `codebase-architecture-audit.js`
+3. `policy-conflict-mining.js`
+4. `multi-city-deep-research.js`
+5. `web-cdp-evidence-extraction.js`

@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.npm-cache/
+.cf-dw/
+.odw/
+.reasonix/
+*.log
+*.jsonl
+*.csv
+.env
+.env.*
+!.env.example

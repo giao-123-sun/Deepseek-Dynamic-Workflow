@@ -1,0 +1,34 @@
+{
+  "name": "@cf-dw/adapter-cli",
+  "version": "0.1.0",
+  "private": true,
+  "license": "SEE LICENSE IN LICENSE.md",
+  "type": "module",
+  "bin": {
+    "cf-dw-agent": "./dist/index.js",
+    "cf-dw-prefix": "./dist/prefix-cli.js",
+    "cf-dw-reasonix-agent": "./dist/reasonix-agent.js",
+    "cf-dw-report": "./dist/report.js",
+    "cf-dw-dashboard": "./dist/dashboard.js",
+    "cf-dw-demo-suite": "./dist/scripts/demo-suite.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check": "tsc -p tsconfig.json --noEmit",
+    "agent": "node ./dist/index.js",
+    "reasonix-agent": "node ./dist/reasonix-agent.js",
+    "prefix": "node ./dist/prefix-cli.js",
+    "report": "node ./dist/report.js",
+    "dashboard": "node ./dist/dashboard.js",
+    "demo:list": "node ./dist/scripts/demo-suite.js --mode list",
+    "demo:dashboards": "node ./dist/scripts/demo-suite.js --mode dashboards",
+    "demo:run": "node ./dist/scripts/demo-suite.js --mode run",
+    "probe:cache": "node ./dist/scripts/cache-probe.js"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "reasonix": "^0.53.2",
+    "repomix": "^1.14.1",
+    "typescript": "^5.7.2"
+  }
+}

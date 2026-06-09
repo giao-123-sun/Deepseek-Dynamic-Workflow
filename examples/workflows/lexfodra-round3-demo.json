@@ -1,0 +1,299 @@
+{
+  "title": "lexfodra-round3-deep-analysis",
+  "kind": "Workflow",
+  "status": "Completed",
+  "description": "深度抓取P0文档全文 + 10城×6领域专项检索 + 完整Phase 6-10冲突检测/验证/评分/对抗/报告管线",
+  "startedAt": "2026-06-09T13:40:00.000Z",
+  "endedAt": "2026-06-09T14:52:16.000Z",
+  "phases": [
+    {
+      "name": "Phase A: Deep Fetch P0 Docs",
+      "status": "completed",
+      "agents": [
+        {
+          "id": "deepfetch-suzhou-resource",
+          "name": "deepfetch:苏州:苏州市公共资源交易管理办法",
+          "status": "completed",
+          "context": "抓取苏州公共资源交易P0全文，验证正文结构与附件。",
+          "tokens": 72100,
+          "tools": 38,
+          "durationMs": 520000,
+          "cacheHitRate": 0.82,
+          "artifact": "p0/suzhou-resource.md"
+        },
+        {
+          "id": "deepfetch-quanzhou-ppp",
+          "name": "deepfetch:泉州:泉州市推广运用政府和社会资本合作（PPP）模式的实施意见",
+          "status": "completed",
+          "context": "抓取泉州PPP政策，抽取投资回报、采购边界、风险分担。",
+          "tokens": 68400,
+          "tools": 31,
+          "durationMs": 498000,
+          "cacheHitRate": 0.78,
+          "artifact": "p0/quanzhou-ppp.md"
+        },
+        {
+          "id": "deepfetch-wuhan-license",
+          "name": "deepfetch:武汉:武汉市市政公用事业特许经营管理办法",
+          "status": "completed",
+          "context": "抓取武汉特许经营办法，标注经营权、期限、退出条款。",
+          "tokens": 46400,
+          "tools": 21,
+          "durationMs": 519000,
+          "cacheHitRate": 0.74,
+          "artifact": "p0/wuhan-license.md"
+        },
+        {
+          "id": "deepfetch-hangzhou-market",
+          "name": "deepfetch:杭州:杭州市市场监督管理局关于持续优化营商环境激发市场主体活力的通知",
+          "status": "completed",
+          "context": "抓取杭州营商环境政策，抽取市场主体保护条款。",
+          "tokens": 66500,
+          "tools": 32,
+          "durationMs": 509000,
+          "cacheHitRate": 0.8,
+          "artifact": "p0/hangzhou-market.md"
+        },
+        {
+          "id": "deepfetch-guangzhou-procurement",
+          "name": "deepfetch:广州:广州市政府采购负面清单",
+          "status": "completed",
+          "context": "抓取广州政府采购负面清单，提取禁止性条款。",
+          "tokens": 43800,
+          "tools": 13,
+          "durationMs": 118000,
+          "cacheHitRate": 0.71,
+          "artifact": "p0/guangzhou-procurement.md"
+        },
+        {
+          "id": "deepfetch-chengdu-license",
+          "name": "deepfetch:成都:成都市人民政府特许经营权管理办法",
+          "status": "completed",
+          "context": "抓取成都特许经营权办法，标注授权和监管流程。",
+          "tokens": 47900,
+          "tools": 23,
+          "durationMs": 340000,
+          "cacheHitRate": 0.77,
+          "artifact": "p0/chengdu-license.md"
+        },
+        {
+          "id": "deepfetch-nanjing-resource",
+          "name": "deepfetch:南京:南京市公共资源交易管理办法",
+          "status": "completed",
+          "context": "抓取南京公共资源交易办法，核验正文来源。",
+          "tokens": 45100,
+          "tools": 12,
+          "durationMs": 336000,
+          "cacheHitRate": 0.69,
+          "artifact": "p0/nanjing-resource.md"
+        },
+        {
+          "id": "deepfetch-shenzhen-procurement",
+          "name": "deepfetch:深圳:深圳经济特区政府采购条例",
+          "status": "completed",
+          "context": "抓取深圳政府采购条例，抽取采购公平竞争条款。",
+          "tokens": 43400,
+          "tools": 10,
+          "durationMs": 279000,
+          "cacheHitRate": 0.73,
+          "artifact": "p0/shenzhen-procurement.md"
+        }
+      ]
+    },
+    {
+      "name": "Phase B: 10-City Deep Search",
+      "status": "completed",
+      "agents": [
+        {
+          "id": "search-suzhou-bidding",
+          "name": "search:苏州:招投标公平竞争专项",
+          "status": "completed",
+          "context": "围绕苏州招投标公平竞争限制开展多源检索。",
+          "tokens": 58300,
+          "tools": 27,
+          "durationMs": 412000,
+          "cacheHitRate": 0.84,
+          "artifact": "search/suzhou-bidding.json"
+        },
+        {
+          "id": "search-wuhan-utility",
+          "name": "search:武汉:市政公用事业准入专项",
+          "status": "completed",
+          "context": "检索武汉市政公用事业准入和特许经营案例。",
+          "tokens": 53800,
+          "tools": 24,
+          "durationMs": 389000,
+          "cacheHitRate": 0.81,
+          "artifact": "search/wuhan-utility.json"
+        },
+        {
+          "id": "search-guangzhou-procurement",
+          "name": "search:广州:政府采购负面清单专项",
+          "status": "completed",
+          "context": "补充广州政府采购负面清单相关公开文件。",
+          "tokens": 49100,
+          "tools": 21,
+          "durationMs": 355000,
+          "cacheHitRate": 0.79,
+          "artifact": "search/guangzhou-procurement.json"
+        },
+        {
+          "id": "search-shenzhen-govbuy",
+          "name": "search:深圳:政府采购条例关联案例",
+          "status": "completed",
+          "context": "检索深圳采购条例、裁判文书和部门解读。",
+          "tokens": 62900,
+          "tools": 33,
+          "durationMs": 436000,
+          "cacheHitRate": 0.86,
+          "artifact": "search/shenzhen-govbuy.json"
+        },
+        {
+          "id": "search-hangzhou-business",
+          "name": "search:杭州:优化营商环境专项",
+          "status": "completed",
+          "context": "检索杭州优化营商环境政策冲突候选。",
+          "tokens": 57500,
+          "tools": 25,
+          "durationMs": 401000,
+          "cacheHitRate": 0.83,
+          "artifact": "search/hangzhou-business.json"
+        },
+        {
+          "id": "search-chengdu-franchise",
+          "name": "search:成都:特许经营权专项",
+          "status": "completed",
+          "context": "检索成都特许经营权管理与相关行政许可实践。",
+          "tokens": 50200,
+          "tools": 19,
+          "durationMs": 372000,
+          "cacheHitRate": 0.8,
+          "artifact": "search/chengdu-franchise.json"
+        }
+      ]
+    },
+    {
+      "name": "Phase C: Normalize & Tag",
+      "status": "completed",
+      "agents": [
+        {
+          "id": "normalize-p0",
+          "name": "normalize:P0全文结构化",
+          "status": "completed",
+          "context": "将P0文档标准化为统一段落、条款、来源字段。",
+          "tokens": 94200,
+          "tools": 18,
+          "durationMs": 490000,
+          "cacheHitRate": 0.88,
+          "artifact": "normalized/p0.jsonl"
+        },
+        {
+          "id": "tag-domain",
+          "name": "tag:领域与限制类型标注",
+          "status": "completed",
+          "context": "标注采购、特许经营、市场准入、PPP等领域。",
+          "tokens": 78600,
+          "tools": 11,
+          "durationMs": 376000,
+          "cacheHitRate": 0.85,
+          "artifact": "normalized/domain-tags.jsonl"
+        }
+      ]
+    },
+    {
+      "name": "Phase D: Conflict Detection",
+      "status": "completed",
+      "agents": [
+        {
+          "id": "detect-procurement",
+          "name": "detect:政府采购冲突候选",
+          "status": "completed",
+          "context": "检测政府采购负面清单与上位规范冲突候选。",
+          "tokens": 126000,
+          "tools": 42,
+          "durationMs": 584000,
+          "cacheHitRate": 0.9,
+          "artifact": "conflicts/procurement.json"
+        },
+        {
+          "id": "detect-franchise",
+          "name": "detect:特许经营冲突候选",
+          "status": "completed",
+          "context": "检测特许经营授权、准入和退出条款冲突候选。",
+          "tokens": 119400,
+          "tools": 39,
+          "durationMs": 561000,
+          "cacheHitRate": 0.89,
+          "artifact": "conflicts/franchise.json"
+        },
+        {
+          "id": "detect-resource",
+          "name": "detect:公共资源交易冲突候选",
+          "status": "completed",
+          "context": "检测公共资源交易管理办法中的排他和限制性条款。",
+          "tokens": 108700,
+          "tools": 34,
+          "durationMs": 532000,
+          "cacheHitRate": 0.87,
+          "artifact": "conflicts/resource.json"
+        }
+      ]
+    },
+    {
+      "name": "Phase E: Verify & Score",
+      "status": "completed",
+      "agents": [
+        {
+          "id": "verify-high-risk",
+          "name": "verify:高风险冲突复核",
+          "status": "completed",
+          "context": "对高风险冲突候选做来源、上位法、事实链复核。",
+          "tokens": 141000,
+          "tools": 51,
+          "durationMs": 620000,
+          "cacheHitRate": 0.91,
+          "artifact": "verification/high-risk.json"
+        },
+        {
+          "id": "score-conflicts",
+          "name": "score:冲突强度评分",
+          "status": "completed",
+          "context": "按规范层级、限制强度、证据完整度进行评分。",
+          "tokens": 97300,
+          "tools": 15,
+          "durationMs": 421000,
+          "cacheHitRate": 0.86,
+          "artifact": "verification/scores.json"
+        }
+      ]
+    },
+    {
+      "name": "Phase F: Adversarial + Synthesize",
+      "status": "running",
+      "agents": [
+        {
+          "id": "adv-defense",
+          "name": "adversarial:反方抗辩生成",
+          "status": "running",
+          "context": "为高分冲突生成可能抗辩并检查报告脆弱点。",
+          "tokens": 38200,
+          "tools": 9,
+          "durationMs": 172000,
+          "cacheHitRate": 0.76,
+          "artifact": "adversarial/defense-draft.json"
+        },
+        {
+          "id": "synthesis-report",
+          "name": "synthesis:最终报告管线",
+          "status": "pending",
+          "context": "汇总候选、验证、评分和对抗结果，生成报告草案。",
+          "tokens": 0,
+          "tools": 0,
+          "durationMs": 0,
+          "cacheHitRate": null,
+          "artifact": "reports/final-report.md"
+        }
+      ]
+    }
+  ]
+}
