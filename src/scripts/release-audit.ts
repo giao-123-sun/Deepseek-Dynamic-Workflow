@@ -182,10 +182,17 @@ async function auditProjectFiles(cwd: string): Promise<Gate[]> {
   }
 
   for (const demo of DEMOS) {
+    const scriptPath = path.join(cwd, demo.script);
+    const scriptExists = await fileExists(scriptPath);
     gates.push({
       name: `demo-script:${demo.name}`,
-      passed: await fileExists(path.join(cwd, demo.script)),
+      passed: scriptExists,
       detail: demo.script
+    });
+    gates.push({
+      name: `structured-handoff:${demo.name}`,
+      passed: scriptExists && (await readTextFile(scriptPath)).includes("cf-dw.structured-handoff.v1"),
+      detail: `${demo.script} uses compact structured handoff.`
     });
   }
 

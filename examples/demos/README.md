@@ -4,6 +4,11 @@ These demos are plain ODW workflow scripts. They use stable `C_FDW_*` metadata s
 CFDW can aggregate phases, agents, cache metrics, and artifacts into the
 dashboard.
 
+Each demo keeps a local `structuredHandoff()` helper inside the workflow body.
+ODW injects primitives into workflow scripts and does not support arbitrary
+top-level imports, so the helper is duplicated intentionally. The handoff format
+is `cf-dw.structured-handoff.v1`.
+
 Run one demo:
 
 ```bash

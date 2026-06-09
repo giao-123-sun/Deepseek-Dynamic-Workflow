@@ -92,6 +92,7 @@ Implemented locally:
 - `cf-dw-report`: cache/token usage reports from run ledgers.
 - `cf-dw-dashboard`: static workflow execution dashboard.
 - `cf-dw-release-audit`: release gate verifier for files, demos, ReasoniX artifacts, and cache hit rate.
+- Demo workflows use `cf-dw.structured-handoff.v1` to pass compact upstream evidence across phases.
 - ODW real-run demos through both Native C-FDW and ReasoniX backends.
 
 Verified release-demo metrics:
@@ -100,9 +101,9 @@ Verified release-demo metrics:
 demo workflows  = 5
 agents          = 23
 reasonix agents = 20
-cache hit       = 206,336 tokens
-cache miss      = 24,214 tokens
-hit rate        = 89.50%
+cache hit       = 202,880 tokens
+cache miss      = 27,142 tokens
+hit rate        = 88.20%
 ```
 
 See [docs/demo-benchmark-report-cn.md](./docs/demo-benchmark-report-cn.md).
@@ -248,7 +249,7 @@ The release target is five practical demos:
 
 | Demo | Backend | Purpose | Metrics |
 |---|---|---|---|
-| [Cache ROI Benchmark](./examples/demos/cache-roi-benchmark.js) | Native + ReasoniX | Run a stable workflow shape and define cold/warm cache gates. | 96.50% cache hit |
+| [Cache ROI Benchmark](./examples/demos/cache-roi-benchmark.js) | Native + ReasoniX | Run a stable workflow shape and define cold/warm cache gates. | 90.67% cache hit |
 | [Codebase Architecture Audit](./examples/demos/codebase-architecture-audit.js) | Native + ReasoniX | Parallel agents inspect modules and synthesize a release report. | 88.42% cache hit |
 | [Policy / Legal Conflict Mining](./examples/demos/policy-conflict-mining.js) | ReasoniX | Multi-phase rule extraction, comparison, and conflict scoring. | 88.79% cache hit |
 | [Multi-City Deep Research](./examples/demos/multi-city-deep-research.js) | ReasoniX | City/domain fan-out, normalization, comparison, report outline. | 85.16% cache hit |

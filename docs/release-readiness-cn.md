@@ -20,6 +20,7 @@
 13. Dashboard artifact preview panel，可展开预览文本类 artifact。
 14. Demo suite runner：`npm run demo:run` / `npm run demo:dashboards`。
 15. Release audit runner：`npm run release:audit`。
+16. Demo structured handoff：`cf-dw.structured-handoff.v1`，并由 release audit 检查。
 
 ## 本地验证
 
@@ -35,9 +36,9 @@ Demo suite：
 demos        = 5
 agents       = 23
 reasonix     = 20 agents
-cache hit    = 206,336
-cache miss   = 24,214
-hit rate     = 89.50%
+cache hit    = 202,880
+cache miss   = 27,142
+hit rate     = 88.20%
 ```
 
 ## 发布前仍建议完成
@@ -64,7 +65,7 @@ GitHub auth   = not available in this local shell
 ```text
 CFDW v0.1.0-alpha is a non-commercial source-available release candidate.
 It demonstrates cache-first dynamic workflows on ODW with Native C-FDW and
-ReasoniX backends. The five demo workflows reached 89.50% aggregate warm-cache
+ReasoniX backends. The five demo workflows reached 88.20% aggregate warm-cache
 hit rate in local release audit.
 ```
 

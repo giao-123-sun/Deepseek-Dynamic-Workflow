@@ -16,9 +16,9 @@
 demos        = 5
 agents       = 23
 reasonix     = 20 agents
-cache hit    = 206,336 tokens
-cache miss   = 24,214 tokens
-hit rate     = 89.50%
+cache hit    = 202,880 tokens
+cache miss   = 27,142 tokens
+hit rate     = 88.20%
 ```
 
 这说明当前 cache-first 策略在 demo suite 上已经达到 80-90%+ 的发布目标。
@@ -35,7 +35,7 @@ npm run release:audit
 
 | Demo | Audit scope | Agents | Cache hit | Cache miss | Hit rate | 后端 |
 |---|---:|---:|---:|---:|---:|---|
-| Cache ROI Benchmark | latest-per-agent | 3 | 49,280 | 1,786 | 96.50% | Native + ReasoniX |
+| Cache ROI Benchmark | latest-per-agent | 3 | 45,824 | 4,714 | 90.67% | Native + ReasoniX |
 | Codebase Architecture Audit | latest-per-agent | 4 | 85,376 | 11,185 | 88.42% | Native + ReasoniX |
 | Policy / Legal Conflict Mining | latest-per-agent | 5 | 22,400 | 2,829 | 88.79% | ReasoniX |
 | Multi-City Deep Research | latest-per-agent | 7 | 31,360 | 5,464 | 85.16% | ReasoniX |
@@ -44,7 +44,7 @@ npm run release:audit
 总体：
 
 ```text
-hit_rate = 206,336 / (206,336 + 24,214) = 89.50%
+hit_rate = 202,880 / (202,880 + 27,142) = 88.20%
 ```
 
 ## 3. 关键发现
@@ -185,12 +185,13 @@ or instructions for another agent.
 4. 架构图视觉资产。
 5. ODW mixed adapter。
 6. Native + ReasoniX 真实 demo suite。
-7. 5 个 demo 的 warm cache 综合命中率 89.50%。
+7. 5 个 demo 的 warm cache 综合命中率 88.20%。
 8. ReasoniX wrapper artifact manifest 初版。
 9. Dashboard `--run-id` / `--since` / `--latest-per-agent` 过滤。
 10. Dashboard artifact chips 与 backend chips。
 11. Dashboard artifact preview panel，可展开预览文本类 artifact。
 12. Demo suite runner：`npm run demo:run` / `npm run demo:dashboards`。
+13. Demo structured handoff：`cf-dw.structured-handoff.v1`，减少 synthesis prompt drift。
 
 仍需继续：
 

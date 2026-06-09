@@ -26,6 +26,30 @@ function tagged({ phaseName, agentName, context, task }) {
   ].join('\n')
 }
 
+function structuredHandoff(items, options = {}) {
+  const label = options.label ?? 'cf-dw-handoff'
+  const maxItemChars = options.maxItemChars ?? 900
+  const normalized = items.filter(Boolean).map((item, index) => {
+    const text = String(item).replace(/\s+/g, ' ').trim()
+    return {
+      index: index + 1,
+      hash: stableHash(text),
+      chars: text.length,
+      excerpt: text.length > maxItemChars ? `${text.slice(0, maxItemChars - 1)}...` : text,
+    }
+  })
+  return JSON.stringify({ version: 'cf-dw.structured-handoff.v1', label, count: normalized.length, items: normalized }, null, 2)
+}
+
+function stableHash(value) {
+  let hash = 2166136261
+  for (let i = 0; i < value.length; i += 1) {
+    hash ^= value.charCodeAt(i)
+    hash = Math.imul(hash, 16777619)
+  }
+  return (hash >>> 0).toString(16).padStart(8, '0')
+}
+
 phase('Phase A: Extract Rules')
 
 const extraction = await parallel(
@@ -61,8 +85,9 @@ const verification = await agent(
       '1. Group rules by obligation type.',
       '2. Identify candidate conflicts and explain the tension.',
       '3. Score each candidate as high, medium, or low confidence.',
+      'Use the structured handoff JSON as upstream evidence. Prefer sha/excerpt references over copying full text.',
       '',
-      extraction.filter(Boolean).join('\n\n---\n\n'),
+      structuredHandoff(extraction, { label: 'rule-extraction-reports' }),
     ].join('\n'),
   }),
   { label: 'reasonix:conflict-verifier', phase: 'Phase B: Conflict Verification', adapter: 'cf_dw_reasonix' },

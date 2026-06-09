@@ -18,8 +18,9 @@
 | ODW custom adapter 形态 | 已完成 | `odw.config.json`、`odw.reasonix.config.json`、`odw.mixed.config.json` |
 | DeepSeek cache-first 接入 | 已完成 | `src/deepseek-client.ts`、`src/usage-ledger.ts`、`src/prefix-builder.ts` |
 | ReasoniX 多步 agent harness | 已完成 | `src/reasonix-agent.ts`、`examples/demos/*` |
+| 跨阶段结构化 handoff | 已完成 | demo 源码包含 `cf-dw.structured-handoff.v1`，由 `npm run release:audit` 检查 |
 | 5 个 demo 实测 | 已完成 | `docs/demo-benchmark-report-cn.md` |
-| 缓存命中 80%-90%+ | 已完成 | `npm run release:audit` 汇总命中率 `89.50%` |
+| 缓存命中 80%-90%+ | 已完成 | `npm run release:audit` 汇总命中率 `88.20%` |
 | Dashboard 可视化 | 已完成 artifact preview 版 | `src/dashboard.ts`、`src/workflow-view.ts` |
 | Release audit | 已完成 | `src/scripts/release-audit.ts`、`npm run release:audit` |
 | GitHub CI | 已完成 | `.github/workflows/ci.yml` |
@@ -42,9 +43,9 @@ dashboard artifact preview mobile   pass, no horizontal overflow
 demos        = 5
 agents       = 23
 reasonix     = 20 agents
-cache hit    = 206,336 tokens
-cache miss   = 24,214 tokens
-hit rate     = 89.50%
+cache hit    = 202,880 tokens
+cache miss   = 27,142 tokens
+hit rate     = 88.20%
 ```
 
 ## 3. 当前不能自动完成的外部步骤
@@ -97,7 +98,7 @@ git push -u origin main
 CFDW v0.1.0-alpha is a non-commercial source-available release candidate.
 It demonstrates cache-first dynamic workflows on Open Dynamic Workflows with
 Native C-FDW and ReasoniX harness backends. The five verified demo workflows
-reached 89.50% aggregate warm-cache hit rate in local DeepSeek release audit.
+reached 88.20% aggregate warm-cache hit rate in local DeepSeek release audit.
 ```
 
 ## 7. 后续工程路线

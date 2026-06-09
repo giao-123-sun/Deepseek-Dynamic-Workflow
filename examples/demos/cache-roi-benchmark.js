@@ -19,6 +19,30 @@ function tagged({ phaseName, agentName, context, task }) {
   ].join('\n')
 }
 
+function structuredHandoff(items, options = {}) {
+  const label = options.label ?? 'cf-dw-handoff'
+  const maxItemChars = options.maxItemChars ?? 900
+  const normalized = items.filter(Boolean).map((item, index) => {
+    const text = String(item).replace(/\s+/g, ' ').trim()
+    return {
+      index: index + 1,
+      hash: stableHash(text),
+      chars: text.length,
+      excerpt: text.length > maxItemChars ? `${text.slice(0, maxItemChars - 1)}...` : text,
+    }
+  })
+  return JSON.stringify({ version: 'cf-dw.structured-handoff.v1', label, count: normalized.length, items: normalized }, null, 2)
+}
+
+function stableHash(value) {
+  let hash = 2166136261
+  for (let i = 0; i < value.length; i += 1) {
+    hash ^= value.charCodeAt(i)
+    hash = Math.imul(hash, 16777619)
+  }
+  return (hash >>> 0).toString(16).padStart(8, '0')
+}
+
 phase('Phase A: Prefix Surface')
 
 const prefixReports = await parallel([
@@ -63,8 +87,9 @@ const synthesis = await agent(
     task: [
       'Read the two reports below and produce a compact benchmark checklist.',
       'Include: metrics, expected cold/warm behavior, and a pass/fail gate for 80-90% warm cache hit.',
+      'Use the structured handoff JSON as upstream evidence. Prefer sha/excerpt references over copying full text.',
       '',
-      prefixReports.filter(Boolean).join('\n\n---\n\n'),
+      structuredHandoff(prefixReports, { label: 'prefix-surface-reports' }),
     ].join('\n'),
   }),
   { label: 'reasonix:roi-synthesis', phase: 'Phase B: ROI Synthesis', adapter: 'cf_dw_reasonix' },

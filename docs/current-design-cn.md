@@ -24,6 +24,8 @@ ReasoniX 负责复杂 agent 的高自治执行环境。
 Native C-FDW agent 负责简单、低成本、强可控的轻量任务。
 ```
 
+当前 demo workflow 已引入 `cf-dw.structured-handoff.v1`。它把上游 agent 的结果压缩成稳定 JSON handoff：固定版本号、label、item hash、字符数和截断 excerpt。这样 synthesis 阶段不再直接拼接大段自然语言输出，可以降低 prompt drift，也让后续 artifact manifest handoff 更自然地接上。
+
 ## 2. 当前已实现状态
 
 已完成的本地能力：
@@ -42,9 +44,9 @@ Native C-FDW agent 负责简单、低成本、强可控的轻量任务。
 demos          = 5
 agents         = 23
 reasonix agents = 20
-cache hit      = 206,336 tokens
-cache miss     = 24,214 tokens
-hit rate       = 89.50%
+cache hit      = 202,880 tokens
+cache miss     = 27,142 tokens
+hit rate       = 88.20%
 ```
 
 这里的核心指标不是准确率或召回率，而是贯穿缓存命中、执行成功率、agent 完成率、工具调用稳定性和产物可追踪性。
