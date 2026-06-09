@@ -23,12 +23,12 @@ async function main(): Promise<void> {
 }
 
 async function runReleasePack(args: ReleasePackArgs): Promise<void> {
-  const npm = process.platform === "win32" ? "npm.cmd" : "npm";
-  await runCommand([npm, "run", "check"], args.cwd);
-  await runCommand([npm, "run", "build"], args.cwd);
-  await runCommand([npm, "run", "release:audit"], args.cwd);
+  const tsc = path.join(args.cwd, "node_modules", "typescript", "bin", "tsc");
+  await runCommand([process.execPath, tsc, "-p", "tsconfig.json", "--noEmit"], args.cwd);
+  await runCommand([process.execPath, tsc, "-p", "tsconfig.json"], args.cwd);
+  await runCommand([process.execPath, path.join(args.cwd, "dist", "scripts", "release-audit.js")], args.cwd);
   if (!args.skipDashboards) {
-    await runCommand([npm, "run", "demo:dashboards"], args.cwd);
+    await runCommand([process.execPath, path.join(args.cwd, "dist", "scripts", "demo-suite.js"), "--mode", "dashboards"], args.cwd);
   }
   await runCommand(["git", "diff", "--check"], args.cwd);
 
