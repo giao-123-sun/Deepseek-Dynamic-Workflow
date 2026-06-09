@@ -192,6 +192,7 @@ or instructions for another agent.
 11. Dashboard artifact preview panel，可展开预览文本类 artifact。
 12. Demo suite runner：`npm run demo:run` / `npm run demo:dashboards`。
 13. Demo structured handoff：`cf-dw.structured-handoff.v1`，减少 synthesis prompt drift。
+14. Release pack runner：`npm run release:pack`，生成不含本地运行产物和密钥的源码发布包。
 
 仍需继续：
 

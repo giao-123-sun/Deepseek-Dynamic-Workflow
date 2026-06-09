@@ -92,6 +92,7 @@ Implemented locally:
 - `cf-dw-report`: cache/token usage reports from run ledgers.
 - `cf-dw-dashboard`: static workflow execution dashboard.
 - `cf-dw-release-audit`: release gate verifier for files, demos, ReasoniX artifacts, and cache hit rate.
+- `cf-dw-release-pack`: local release archive builder using `git archive HEAD`.
 - Demo workflows use `cf-dw.structured-handoff.v1` to pass compact upstream evidence across phases.
 - ODW real-run demos through both Native C-FDW and ReasoniX backends.
 
@@ -275,6 +276,15 @@ Verify the release gates from local files and real run artifacts:
 ```bash
 npm run release:audit
 ```
+
+Create a source release archive from the committed `HEAD`:
+
+```bash
+npm run release:pack
+```
+
+The archive is written under `.cf-dw/release/` and excludes local secrets,
+runtime logs, dashboards, `dist/`, and dependencies.
 
 For the current design record, see
 [docs/current-design-cn.md](./docs/current-design-cn.md).

@@ -23,6 +23,7 @@
 | 缓存命中 80%-90%+ | 已完成 | `npm run release:audit` 汇总命中率 `88.20%` |
 | Dashboard 可视化 | 已完成 artifact preview 版 | `src/dashboard.ts`、`src/workflow-view.ts` |
 | Release audit | 已完成 | `src/scripts/release-audit.ts`、`npm run release:audit` |
+| Release pack | 已完成 | `src/scripts/release-pack.ts`、`npm run release:pack` |
 | GitHub CI | 已完成 | `.github/workflows/ci.yml` |
 | 私钥不入仓库 | 已检查 | `.env` 被 `.gitignore` 忽略，`.env.example` 只有占位符 |
 
@@ -32,6 +33,7 @@
 npm run build  pass
 npm run check  pass
 npm run release:audit  pass
+npm run release:pack  pass after tracked worktree is clean
 git diff --cached --check  pass before commit
 dashboard artifact preview desktop  pass, no horizontal overflow
 dashboard artifact preview mobile   pass, no horizontal overflow
@@ -80,6 +82,7 @@ https://github.com/<owner>/cf-dw.git
 ```bash
 git remote add origin https://github.com/<owner>/cf-dw.git
 git push -u origin main
+npm run release:pack
 ```
 
 如果 Git Credential Manager 弹出浏览器登录，完成 GitHub 授权后再重试 push。

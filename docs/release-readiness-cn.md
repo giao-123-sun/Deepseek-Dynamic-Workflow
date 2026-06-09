@@ -21,12 +21,15 @@
 14. Demo suite runner：`npm run demo:run` / `npm run demo:dashboards`。
 15. Release audit runner：`npm run release:audit`。
 16. Demo structured handoff：`cf-dw.structured-handoff.v1`，并由 release audit 检查。
+17. Release pack runner：`npm run release:pack`，使用 `git archive HEAD` 生成源码发布包。
 
 ## 本地验证
 
 ```text
 npm run check: pass
 npm run build: pass
+npm run release:audit: pass
+npm run release:pack: pass after tracked worktree is clean
 dashboard localhost check: pass
 ```
 
