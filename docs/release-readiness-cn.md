@@ -22,6 +22,7 @@
 15. Release audit runner：`npm run release:audit`。
 16. Demo structured handoff：`cf-dw.structured-handoff.v1`，并由 release audit 检查。
 17. Release pack runner：`npm run release:pack`，使用 `git archive HEAD` 生成源码发布包。
+18. GitHub tag source archive workflow：`.github/workflows/release-source.yml`。
 
 ## 本地验证
 
@@ -48,9 +49,10 @@ hit rate     = 88.20%
 
 1. 将本地 Git 仓库推送到 GitHub remote。
 2. 在 GitHub README 中确认图片路径 `assets/*.png` 正常显示。
-3. 将跨阶段 synthesis prompt 从自然语言拼接升级为读取结构化 `artifact-manifest.json`。
-4. 接入真实 CDP browser executor。
-5. Dashboard 增加图片/截图 artifact 缩略图预览。
+3. 推送 `v0.1.0-alpha` tag，并确认 `release-source` workflow 上传源码包 artifact。
+4. 将跨阶段 synthesis prompt 从 structured handoff 升级为直接读取结构化 `artifact-manifest.json`。
+5. 接入真实 CDP browser executor。
+6. Dashboard 增加图片/截图 artifact 缩略图预览。
 
 当前本地仓库状态：
 

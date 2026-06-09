@@ -1,0 +1,71 @@
+name: release-source
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag label used in the archive name"
+        required: false
+        default: "manual"
+
+jobs:
+  source-archive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run check
+
+      - name: Build
+        run: npm run build
+
+      - name: Create source archive
+        id: pack
+        shell: bash
+        run: |
+          set -euo pipefail
+          TAG_INPUT="${{ github.event.inputs.tag || '' }}"
+          TAG_NAME="${TAG_INPUT:-${GITHUB_REF_NAME:-manual}}"
+          COMMIT="$(git rev-parse --short=12 HEAD)"
+          ARCHIVE="cf-dw-${TAG_NAME}-${COMMIT}.zip"
+          PREFIX="cf-dw-${TAG_NAME}/"
+          mkdir -p release
+          git archive --format=zip --output="release/${ARCHIVE}" --prefix="${PREFIX}" HEAD
+          SHA256="$(sha256sum "release/${ARCHIVE}" | awk '{print $1}')"
+          BYTES="$(wc -c < "release/${ARCHIVE}" | tr -d ' ')"
+          cat > "release/${ARCHIVE%.zip}.manifest.json" <<EOF
+          {
+            "version": "cf-dw.release-pack.v1",
+            "tag": "${TAG_NAME}",
+            "commit": "${COMMIT}",
+            "archive": "${ARCHIVE}",
+            "bytes": ${BYTES},
+            "sha256": "${SHA256}",
+            "source": "git archive HEAD",
+            "note": "Live DeepSeek demo audit is intentionally manual because it requires DEEPSEEK_API_KEY and API cost."
+          }
+          EOF
+          echo "archive=${ARCHIVE}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload source archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.pack.outputs.archive }}
+          path: release/*
+          if-no-files-found: error

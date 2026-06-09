@@ -286,6 +286,11 @@ npm run release:pack
 The archive is written under `.cf-dw/release/` and excludes local secrets,
 runtime logs, dashboards, `dist/`, and dependencies.
 
+On GitHub, pushing a tag such as `v0.1.0-alpha` runs
+`.github/workflows/release-source.yml`, which builds the project and uploads a
+source archive artifact. Live DeepSeek demo audit remains a manual release gate
+because it requires a private API key and incurs model cost.
+
 For the current design record, see
 [docs/current-design-cn.md](./docs/current-design-cn.md).
 

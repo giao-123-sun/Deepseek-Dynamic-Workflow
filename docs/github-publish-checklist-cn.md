@@ -25,6 +25,7 @@
 | Release audit | 已完成 | `src/scripts/release-audit.ts`、`npm run release:audit` |
 | Release pack | 已完成 | `src/scripts/release-pack.ts`、`npm run release:pack` |
 | GitHub CI | 已完成 | `.github/workflows/ci.yml` |
+| GitHub tag source archive | 已完成 | `.github/workflows/release-source.yml` |
 | 私钥不入仓库 | 已检查 | `.env` 被 `.gitignore` 忽略，`.env.example` 只有占位符 |
 
 ## 2. 已执行的本地验证
@@ -83,9 +84,13 @@ https://github.com/<owner>/cf-dw.git
 git remote add origin https://github.com/<owner>/cf-dw.git
 git push -u origin main
 npm run release:pack
+git tag v0.1.0-alpha
+git push origin v0.1.0-alpha
 ```
 
 如果 Git Credential Manager 弹出浏览器登录，完成 GitHub 授权后再重试 push。
+
+`v0.1.0-alpha` tag 推送后，GitHub 会运行 `release-source` workflow，上传源码 zip 与 manifest artifact。这个 workflow 不运行 live DeepSeek demo；live demo 仍以 `npm run release:audit` 的本地审计结果为发布依据。
 
 ## 5. GitHub 页面发布后检查
 
@@ -93,7 +98,8 @@ npm run release:pack
 2. README 架构图 `assets/cf-dw-architecture.png` 正常显示。
 3. License 页显示非商用许可。
 4. GitHub Actions 的 `CI` workflow 能运行 `npm ci`、`npm run build`、`npm run check`。
-5. README 中 demo 指标和 `docs/demo-benchmark-report-cn.md` 一致。
+5. GitHub Actions 的 `release-source` workflow 能在 tag 上上传 source archive artifact。
+6. README 中 demo 指标和 `docs/demo-benchmark-report-cn.md` 一致。
 
 ## 6. Alpha 发布说明建议
 
