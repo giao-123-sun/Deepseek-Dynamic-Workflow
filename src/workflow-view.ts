@@ -27,6 +27,9 @@ export interface WorkflowArtifactView {
   path: string;
   bytes?: number;
   sha256?: string;
+  preview?: string;
+  previewTruncated?: boolean;
+  previewError?: string;
 }
 
 export interface WorkflowPhaseView {
@@ -117,6 +120,7 @@ async function buildWorkflowFromRuns(options: {
     const session = (await fileExists(sessionPath))
       ? JSON.parse(await readTextFile(sessionPath)) as {
           sessionId?: string;
+          cwd?: string;
           createdAt?: string;
           appendOnlyLog?: Array<Record<string, unknown>>;
           finalResult?: string;
@@ -129,7 +133,8 @@ async function buildWorkflowFromRuns(options: {
     const toolResults = session.appendOnlyLog?.filter((entry) => entry.kind === "tool_result").length ?? 0;
     const context = String(firstTask?.content ?? session.finalResult ?? summary.runName);
     const metadata = parseMetadata(context);
-    const manifest = await readArtifactManifest(summary.runDir);
+    const artifactRoot = session.cwd ? path.resolve(session.cwd) : inferArtifactRoot(runsRoot);
+    const manifest = await readArtifactManifest(summary.runDir, artifactRoot);
 
     if (workflowTag && metadata.workflow !== workflowTag) {
       continue;
@@ -180,7 +185,7 @@ async function buildWorkflowFromRuns(options: {
   };
 }
 
-async function readArtifactManifest(runDir: string): Promise<{
+async function readArtifactManifest(runDir: string, artifactRoot: string): Promise<{
   backend?: string;
   artifacts?: WorkflowArtifactView[];
 } | undefined> {
@@ -199,16 +204,107 @@ async function readArtifactManifest(runDir: string): Promise<{
 
   return {
     backend: raw.backend,
-    artifacts: (raw.artifacts ?? [])
+    artifacts: await Promise.all((raw.artifacts ?? [])
       .filter((artifact) => artifact.path)
-      .map((artifact) => ({
-        id: artifact.id ?? path.basename(String(artifact.path)),
-        type: artifact.type ?? "file",
-        path: String(artifact.path),
-        bytes: artifact.bytes,
-        sha256: artifact.sha256
+      .map(async (artifact) => {
+        const view: WorkflowArtifactView = {
+          id: artifact.id ?? path.basename(String(artifact.path)),
+          type: artifact.type ?? "file",
+          path: String(artifact.path),
+          bytes: artifact.bytes,
+          sha256: artifact.sha256
+        };
+        return addArtifactPreview(view, artifactRoot);
       }))
   };
+}
+
+async function addArtifactPreview(
+  artifact: WorkflowArtifactView,
+  artifactRoot: string
+): Promise<WorkflowArtifactView> {
+  const resolved = resolveWorkspacePath(artifactRoot, artifact.path);
+  if (!resolved) {
+    return {
+      ...artifact,
+      previewError: "Preview skipped: artifact path escapes workspace."
+    };
+  }
+
+  if (!isPreviewableArtifact(artifact)) {
+    return artifact;
+  }
+
+  if (!(await fileExists(resolved))) {
+    return {
+      ...artifact,
+      previewError: "Preview skipped: artifact file is missing."
+    };
+  }
+
+  const fileStat = await stat(resolved);
+  const bytes = artifact.bytes ?? fileStat.size;
+  const maxPreviewBytes = 80_000;
+  if (fileStat.size > maxPreviewBytes) {
+    return {
+      ...artifact,
+      bytes,
+      previewError: `Preview skipped: file is larger than ${maxPreviewBytes} bytes.`
+    };
+  }
+
+  try {
+    const raw = await readTextFile(resolved);
+    const preview = normalizeArtifactPreview(raw, artifact.type, artifact.path);
+    const maxPreviewChars = 2_400;
+    return {
+      ...artifact,
+      bytes,
+      preview: preview.length > maxPreviewChars ? preview.slice(0, maxPreviewChars) : preview,
+      previewTruncated: preview.length > maxPreviewChars
+    };
+  } catch (error) {
+    return {
+      ...artifact,
+      bytes,
+      previewError: `Preview skipped: ${error instanceof Error ? error.message : String(error)}`
+    };
+  }
+}
+
+function resolveWorkspacePath(cwd: string, inputPath: string): string | undefined {
+  const resolved = path.resolve(cwd, inputPath);
+  const relative = path.relative(cwd, resolved);
+  if (relative.startsWith("..") || path.isAbsolute(relative)) return undefined;
+  return resolved;
+}
+
+function isPreviewableArtifact(artifact: WorkflowArtifactView): boolean {
+  const type = artifact.type.toLowerCase();
+  const ext = path.extname(artifact.path).toLowerCase();
+  return ["text", "markdown", "json", "jsonl", "csv", "log"].includes(type)
+    || [".txt", ".md", ".json", ".jsonl", ".csv", ".log"].includes(ext);
+}
+
+function normalizeArtifactPreview(raw: string, type: string, filePath: string): string {
+  const lowerType = type.toLowerCase();
+  const ext = path.extname(filePath).toLowerCase();
+  if (lowerType === "json" || ext === ".json") {
+    try {
+      return JSON.stringify(JSON.parse(raw), null, 2);
+    } catch {
+      return raw;
+    }
+  }
+  return raw;
+}
+
+function inferArtifactRoot(runsRoot: string): string {
+  const normalized = path.resolve(runsRoot);
+  if (path.basename(normalized) === "runs" && path.basename(path.dirname(normalized)) === ".cf-dw") {
+    return path.dirname(path.dirname(normalized));
+  }
+  return process.cwd();
 }
 
 function latestAgents(agents: WorkflowAgentView[]): WorkflowAgentView[] {

@@ -20,7 +20,7 @@
 | ReasoniX 多步 agent harness | 已完成 | `src/reasonix-agent.ts`、`examples/demos/*` |
 | 5 个 demo 实测 | 已完成 | `docs/demo-benchmark-report-cn.md` |
 | 缓存命中 80%-90%+ | 已完成 | 5 demo 汇总命中率 `89.22%` |
-| Dashboard 可视化 | 已完成基础版 | `src/dashboard.ts`、`src/workflow-view.ts` |
+| Dashboard 可视化 | 已完成 artifact preview 版 | `src/dashboard.ts`、`src/workflow-view.ts` |
 | GitHub CI | 已完成 | `.github/workflows/ci.yml` |
 | 私钥不入仓库 | 已检查 | `.env` 被 `.gitignore` 忽略，`.env.example` 只有占位符 |
 
@@ -30,6 +30,8 @@
 npm run build  pass
 npm run check  pass
 git diff --cached --check  pass before commit
+dashboard artifact preview desktop  pass, no horizontal overflow
+dashboard artifact preview mobile   pass, no horizontal overflow
 ```
 
 5 个 demo 的 warm-run 汇总：
@@ -97,8 +99,8 @@ reached 89.22% aggregate warm-cache hit rate in local DeepSeek testing.
 
 ## 7. 后续工程路线
 
-1. Dashboard artifact chips 升级为完整 artifact panel。
-2. 跨阶段 handoff 从自然语言 stdout 拼接升级为结构化 `artifact-manifest.json`。
-3. Web/CDP demo 接入真实 browser executor。
+1. 跨阶段 handoff 从自然语言 stdout 拼接升级为结构化 `artifact-manifest.json`。
+2. Web/CDP demo 接入真实 browser executor。
+3. Dashboard 增加图片/截图 artifact 缩略图预览。
 4. 增加 benchmark JSON 输出和自动阈值门禁。
 5. 增加 ReasoniX resumable session / pooled session 实验。

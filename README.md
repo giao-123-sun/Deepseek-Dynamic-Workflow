@@ -237,7 +237,7 @@ The dashboard shows:
 - workflow title, status, duration, total tokens, total agents;
 - phase rows with agent squares and hover context;
 - per-agent tokens, tools, cache hit rate, runtime, backend, and artifact path;
-- artifact chips from `artifact-manifest.json`;
+- artifact chips and expandable previews from `artifact-manifest.json`;
 - optional filtering with `--run-id`, `--since`, and `--latest-per-agent`.
 
 ## Demo Suite

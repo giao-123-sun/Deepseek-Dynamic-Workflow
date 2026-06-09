@@ -17,7 +17,8 @@
 10. ReasoniX compact prefix，避免 Windows `spawn ENAMETOOLONG`。
 11. Dashboard `--since` / `--run-id` / `--latest-per-agent` 过滤。
 12. Dashboard artifact chips 与 backend chips。
-13. Demo suite runner：`npm run demo:run` / `npm run demo:dashboards`。
+13. Dashboard artifact preview panel，可展开预览文本类 artifact。
+14. Demo suite runner：`npm run demo:run` / `npm run demo:dashboards`。
 
 ## 本地验证
 
@@ -41,9 +42,9 @@ hit rate     = 89.22%
 
 1. 将本地 Git 仓库推送到 GitHub remote。
 2. 在 GitHub README 中确认图片路径 `assets/*.png` 正常显示。
-3. 将 dashboard 的 artifact chips 升级为完整 artifact panel，可展开预览文本/图片。
-4. 将跨阶段 synthesis prompt 从自然语言拼接升级为读取结构化 `artifact-manifest.json`。
-5. 接入真实 CDP browser executor。
+3. 将跨阶段 synthesis prompt 从自然语言拼接升级为读取结构化 `artifact-manifest.json`。
+4. 接入真实 CDP browser executor。
+5. Dashboard 增加图片/截图 artifact 缩略图预览。
 
 当前本地仓库状态：
 

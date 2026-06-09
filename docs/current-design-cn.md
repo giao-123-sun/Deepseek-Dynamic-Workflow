@@ -427,15 +427,16 @@ C_FDW_CONTEXT: <short context>
 5. agent 小方块。
 6. hover context。
 7. agent 明细表：tokens、tools、cache、time、artifact。
+8. backend chips：`native-cfdw` / `reasonix` 等。
+9. `--run-id`、`--since`、`--latest-per-agent` 过滤。
+10. artifact chips 与可展开 preview panel。
 
 下一步要补：
 
-1. backend 字段：`native-cfdw` / `reasonix` / `reasonix-pro`。
-2. `--run-id` 或 `--since` 过滤，避免多次同 tag run 混在一起。
-3. artifact panel：显示文件类型、大小、来源 agent、可点击路径。
-4. per-turn waterfall：展示每轮模型调用和工具调用。
-5. cache curve：cold / warm run 对比。
-6. failure recovery view：失败 agent、重试、降级输出。
+1. per-turn waterfall：展示每轮模型调用和工具调用。
+2. cache curve：cold / warm run 对比。
+3. failure recovery view：失败 agent、重试、降级输出。
+4. artifact preview 的图片/截图缩略图展示。
 
 ## 13. 版本一路线图
 
@@ -459,7 +460,8 @@ C_FDW_CONTEXT: <short context>
 2. 要求 agent 写 `result.json`。
 3. adapter 自动生成 `artifact-manifest.json`。
 4. dashboard 展示 artifacts。
-5. 后续 phase 接收 previous artifacts。
+5. dashboard 可展开预览文本类 artifacts。
+6. 后续 phase 接收 previous artifacts。
 
 ### M2：mixed backend workflow
 

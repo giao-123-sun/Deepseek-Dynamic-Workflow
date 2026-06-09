@@ -180,14 +180,15 @@ or instructions for another agent.
 8. ReasoniX wrapper artifact manifest 初版。
 9. Dashboard `--run-id` / `--since` / `--latest-per-agent` 过滤。
 10. Dashboard artifact chips 与 backend chips。
-11. Demo suite runner：`npm run demo:run` / `npm run demo:dashboards`。
+11. Dashboard artifact preview panel，可展开预览文本类 artifact。
+12. Demo suite runner：`npm run demo:run` / `npm run demo:dashboards`。
 
 仍需继续：
 
-1. Dashboard 将 artifact chips 升级为完整 artifact panel，可展开预览文本/图片。
-2. 将 synthesis 阶段从拼接自然语言改为读取结构化 artifact。
-3. 接入真实 CDP browser executor，而不仅是 CDP-ready protocol demo。
-4. 推送到 GitHub remote，并在 GitHub 页面确认 README 图片显示正常。
+1. 将 synthesis 阶段从拼接自然语言改为读取结构化 artifact。
+2. 接入真实 CDP browser executor，而不仅是 CDP-ready protocol demo。
+3. 推送到 GitHub remote，并在 GitHub 页面确认 README 图片显示正常。
+4. Dashboard 增加图片/截图 artifact 缩略图预览。
 
 ## 6. 发布建议
 
@@ -195,8 +196,8 @@ or instructions for another agent.
 
 ```text
 Web/CDP demo 当前是 CDP-ready protocol demo，不是 live browser execution。
-Artifact-aware adapter 已有 ReasoniX manifest 初版，dashboard 当前展示 artifact chips，
-完整 artifact panel 尚未完成。
+Artifact-aware adapter 已有 ReasoniX manifest 初版，dashboard 当前展示 artifact chips
+和可展开文本预览 panel。
 ```
 
-如果要作为更完整的 v0.1.0 发布，建议先完成 dashboard artifact panel 和 run-id 过滤。
+如果要作为更完整的 v0.1.0 发布，建议先完成结构化 artifact handoff 和真实 CDP browser executor。

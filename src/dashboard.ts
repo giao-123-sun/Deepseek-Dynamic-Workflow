@@ -395,6 +395,73 @@ function renderDashboard(workflow: WorkflowView): string {
       overflow: hidden;
       text-overflow: ellipsis;
     }
+    .artifact-panel {
+      margin-top: 8px;
+      max-width: min(960px, calc(100vw - 620px));
+      color: #62666a;
+      font-size: 12px;
+      white-space: normal;
+    }
+    .artifact-panel > summary {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 0;
+      padding: 2px 0;
+      color: #4f5357;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .artifact-panel > summary::before {
+      content: "›";
+      color: #9b9da0;
+      font-size: 16px;
+      line-height: 1;
+      transition: transform 140ms ease;
+    }
+    .artifact-panel[open] > summary::before {
+      transform: rotate(90deg);
+    }
+    .artifact-preview-list {
+      display: grid;
+      gap: 7px;
+      margin-top: 6px;
+      padding-bottom: 2px;
+    }
+    .artifact-preview {
+      border-left: 2px solid #d7d9dc;
+      padding: 6px 8px;
+      background: #f8f8f8;
+    }
+    .artifact-preview-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 10px;
+      align-items: baseline;
+      margin-bottom: 4px;
+      color: #5e6266;
+    }
+    .artifact-preview-head strong {
+      color: #3f4246;
+      font-weight: 600;
+    }
+    .artifact-preview-path {
+      color: #8b8f93;
+      overflow-wrap: anywhere;
+    }
+    .artifact-preview pre {
+      margin: 0;
+      max-height: 180px;
+      overflow: auto;
+      color: #2f3133;
+      font: 12px/1.45 ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    .artifact-preview-note {
+      color: #85888c;
+      overflow-wrap: anywhere;
+    }
     @media (max-width: 860px) {
       main { padding: 8px 12px 24px; }
       h1 { font-size: 22px; }
@@ -420,7 +487,8 @@ function renderDashboard(workflow: WorkflowView): string {
         font-size: 17px;
       }
       .agent-name,
-      .agent-context {
+      .agent-context,
+      .artifact-panel {
         max-width: 420px;
       }
     }
@@ -524,6 +592,7 @@ function renderAgentRow(agent: WorkflowAgentView): string {
     <span class="agent-context">${escapeHtml(truncate(agent.context, 88))}</span>
     ${agent.artifact ? `<span class="artifact">${escapeHtml(agent.artifact)}</span>` : ""}
     ${renderAgentExtras(agent)}
+    ${renderArtifactPanel(agent)}
   </td>
   <td>${agent.tokens > 0 ? formatTokens(agent.tokens) : ""}</td>
   <td>${agent.tools > 0 ? agent.tools : ""}</td>
@@ -549,6 +618,36 @@ function renderAgentExtras(agent: WorkflowAgentView): string {
     chips.push(`<span class="artifact-chip">+${remaining} files</span>`);
   }
   return chips.length ? `<div class="agent-extra">${chips.join("")}</div>` : "";
+}
+
+function renderArtifactPanel(agent: WorkflowAgentView): string {
+  const artifacts = agent.artifacts ?? [];
+  if (artifacts.length === 0) return "";
+  return `<details class="artifact-panel">
+  <summary>Artifacts (${artifacts.length})</summary>
+  <div class="artifact-preview-list">
+    ${artifacts.map(renderArtifactPreview).join("\n")}
+  </div>
+</details>`;
+}
+
+function renderArtifactPreview(artifact: NonNullable<WorkflowAgentView["artifacts"]>[number]): string {
+  const meta = [
+    artifact.type,
+    artifact.bytes ? formatBytes(artifact.bytes) : "",
+    artifact.sha256 ? `sha ${artifact.sha256.slice(0, 10)}` : ""
+  ].filter(Boolean).join(" · ");
+  const content = artifact.preview
+    ? `<pre>${escapeHtml(artifact.preview)}${artifact.previewTruncated ? "\n...[truncated]" : ""}</pre>`
+    : `<div class="artifact-preview-note">${escapeHtml(artifact.previewError ?? "No inline preview for this artifact type.")}</div>`;
+  return `<section class="artifact-preview">
+  <div class="artifact-preview-head">
+    <strong>${escapeHtml(artifact.id)}</strong>
+    <span>${escapeHtml(meta)}</span>
+    <span class="artifact-preview-path">${escapeHtml(artifact.path)}</span>
+  </div>
+  ${content}
+</section>`;
 }
 
 function workflowStats(workflow: WorkflowView): WorkflowStats {
