@@ -12,6 +12,7 @@ export interface RunSummary {
   promptTokens: number;
   completionTokens: number;
   totalTokens: number;
+  effectiveTokens: number;
   latencyMs: number;
   hitRate: number | null;
 }
@@ -24,6 +25,7 @@ export interface AggregateSummary {
   promptTokens: number;
   completionTokens: number;
   totalTokens: number;
+  effectiveTokens: number;
   latencyMs: number;
   hitRate: number | null;
 }
@@ -62,6 +64,7 @@ export async function summarizeRun(runDir: string): Promise<RunSummary> {
   let promptTokens = 0;
   let completionTokens = 0;
   let totalTokens = 0;
+  let effectiveTokens = 0;
   let latencyMs = 0;
 
   for (const entry of entries) {
@@ -70,6 +73,7 @@ export async function summarizeRun(runDir: string): Promise<RunSummary> {
     promptTokens += entry.usage.prompt_tokens ?? 0;
     completionTokens += entry.usage.completion_tokens ?? 0;
     totalTokens += entry.usage.total_tokens ?? 0;
+    effectiveTokens += effectiveTokensForUsage(entry);
     latencyMs += entry.latencyMs;
   }
 
@@ -83,9 +87,25 @@ export async function summarizeRun(runDir: string): Promise<RunSummary> {
     promptTokens,
     completionTokens,
     totalTokens,
+    effectiveTokens,
     latencyMs,
     hitRate: cacheTokens > 0 ? hitTokens / cacheTokens : null
   };
+}
+
+export function effectiveTokensForUsage(entry: UsageLedgerEntry): number {
+  const hitTokens = entry.usage.prompt_cache_hit_tokens ?? 0;
+  const missTokens = entry.usage.prompt_cache_miss_tokens ?? 0;
+  const completionTokens = entry.usage.completion_tokens ?? 0;
+  const promptTokens = entry.usage.prompt_tokens ?? 0;
+  const cacheFieldsPresent = hitTokens + missTokens > 0;
+  const uncachedInputTokens = cacheFieldsPresent ? missTokens : promptTokens;
+  return modelMultiplierFor(entry.model) * (uncachedInputTokens + 0.1 * hitTokens + 4 * completionTokens);
+}
+
+function modelMultiplierFor(model: string): number {
+  void model;
+  return 1.0;
 }
 
 export function aggregateSummaries(summaries: RunSummary[]): AggregateSummary {
@@ -97,6 +117,7 @@ export function aggregateSummaries(summaries: RunSummary[]): AggregateSummary {
       acc.promptTokens += summary.promptTokens;
       acc.completionTokens += summary.completionTokens;
       acc.totalTokens += summary.totalTokens;
+      acc.effectiveTokens += summary.effectiveTokens;
       acc.latencyMs += summary.latencyMs;
       return acc;
     },
@@ -107,6 +128,7 @@ export function aggregateSummaries(summaries: RunSummary[]): AggregateSummary {
       promptTokens: 0,
       completionTokens: 0,
       totalTokens: 0,
+      effectiveTokens: 0,
       latencyMs: 0
     }
   );

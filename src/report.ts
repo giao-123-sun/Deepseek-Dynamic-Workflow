@@ -63,6 +63,7 @@ function printPlainSummaries(summaries: RunSummary[]): void {
         `prompt=${summary.promptTokens}`,
         `completion=${summary.completionTokens}`,
         `total=${summary.totalTokens}`,
+        `effective=${formatEffectiveTokens(summary.effectiveTokens)}`,
         `latency_ms=${summary.latencyMs}`
       ].join(" ")
     );
@@ -82,6 +83,7 @@ function printPlainSummaries(summaries: RunSummary[]): void {
         `prompt=${aggregate.promptTokens}`,
         `completion=${aggregate.completionTokens}`,
         `total=${aggregate.totalTokens}`,
+        `effective=${formatEffectiveTokens(aggregate.effectiveTokens)}`,
         `latency_ms=${aggregate.latencyMs}`
       ].join(" ")
     );
@@ -100,12 +102,13 @@ function printVisualSummaries(summaries: RunSummary[]): void {
   console.log("==================");
   console.log(`Runs: ${aggregate.runs}  Turns: ${aggregate.turns}  Hit Rate: ${formatRate(aggregate.hitRate)}`);
   console.log(`Tokens: prompt=${aggregate.promptTokens} completion=${aggregate.completionTokens} total=${aggregate.totalTokens}`);
+  console.log(`Effective Tokens: ${formatEffectiveTokens(aggregate.effectiveTokens)}`);
   console.log(`Latency: ${aggregate.latencyMs} ms`);
   console.log(`Cache: ${aggregate.hitTokens} hit / ${aggregate.missTokens} miss`);
   console.log(`       ${bar(aggregate.hitRate, 34)} ${formatRate(aggregate.hitRate)}`);
   console.log("");
 
-  const headers = ["Run", "Turns", "Hit Rate", "Cache", "Prompt", "Comp", "Latency"];
+  const headers = ["Run", "Turns", "Hit Rate", "Cache", "Prompt", "Comp", "Eff", "Latency"];
   const rows = summaries.map((summary) => [
     summary.runName,
     String(summary.turns),
@@ -113,6 +116,7 @@ function printVisualSummaries(summaries: RunSummary[]): void {
     bar(summary.hitRate, 18),
     String(summary.promptTokens),
     String(summary.completionTokens),
+    formatEffectiveTokens(summary.effectiveTokens),
     `${summary.latencyMs}ms`
   ]);
 
@@ -141,6 +145,10 @@ function bar(rate: number | null, width: number): string {
 
 function formatRate(rate: number | null): string {
   return rate === null ? "n/a" : `${(rate * 100).toFixed(2)}%`;
+}
+
+function formatEffectiveTokens(value: number): string {
+  return value.toFixed(1).replace(/\.0$/, "");
 }
 
 await main();

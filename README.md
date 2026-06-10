@@ -108,6 +108,8 @@ hit rate        = 88.20%
 ```
 
 See [docs/demo-benchmark-report-cn.md](./docs/demo-benchmark-report-cn.md).
+For the token-efficiency rules behind these metrics, see
+[docs/token-efficiency-playbook-cn.md](./docs/token-efficiency-playbook-cn.md).
 
 ## Install
 
@@ -243,6 +245,7 @@ The dashboard shows:
 - per-agent tokens, tools, cache hit rate, runtime, backend, and artifact path;
 - artifact chips and expandable previews from `artifact-manifest.json`;
 - optional filtering with `--run-id`, `--since`, and `--latest-per-agent`.
+- effective token totals, using cache-read, cache-miss, and output weights.
 
 ## Demo Suite
 
@@ -333,6 +336,7 @@ natural-language stdout.
 - [CFDW 五个 Demo 实测 Benchmark 报告](./docs/demo-benchmark-report-cn.md)
 - [CFDW GitHub 发布准备说明](./docs/release-readiness-cn.md)
 - [CFDW GitHub 发布执行清单](./docs/github-publish-checklist-cn.md)
+- [CFDW Token Efficiency Playbook](./docs/token-efficiency-playbook-cn.md)
 - [CFDW v0.1.0-alpha Release Notes](./docs/releases/v0.1.0-alpha.md)
 - [ODW + C-FDW 真实动态工作流运行报告](./docs/odw-real-run-report-cn.md)
 - [ReasoniX Harness 接入与试跑报告](./docs/reasonix-harness-run-report-cn.md)

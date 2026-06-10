@@ -590,3 +590,30 @@ successful extraction rate
 7. 做一个正式 Cache ROI demo。
 
 这会把当前 MVP 从“能跑 ODW + ReasoniX”推进到“真正的动态工作流产品原型”。
+
+## 17. Token efficiency 更新
+
+2026-06-10 根据 GitHub Blog《Improving token efficiency in GitHub Agentic Workflows》的经验，C-FDW 增加了一个新的工程判断：不能只看 total tokens 和 cache hit rate，还要看加权后的 effective tokens。
+
+当前公式：
+
+```text
+effective_tokens = model_multiplier * (prompt_cache_miss_tokens + 0.1 * prompt_cache_hit_tokens + 4 * completion_tokens)
+```
+
+如果 provider 没有 cache hit/miss 字段，则回退为：
+
+```text
+effective_tokens = model_multiplier * (prompt_tokens + 4 * completion_tokens)
+```
+
+当前 `model_multiplier` 默认是 `1.0`。后续可以按模型价格、延迟或 Pro 路由成本配置。
+
+这次更新已经落地到：
+
+1. `cf-dw-report`：输出每个 run 和 aggregate 的 effective token。
+2. `cf-dw-dashboard`：在 workflow 顶部和 agent 表格中展示 `Eff Tokens`。
+3. `cf-dw-release-audit`：在 demo gate 和 aggregate 行中展示 `et`。
+4. `docs/token-efficiency-playbook-cn.md`：记录长期 token efficiency 规则。
+
+这让 C-FDW 的成本观测从“命中率”升级为“命中率 + 输出膨胀 + 循环风险 + artifact 产出”的组合视角。

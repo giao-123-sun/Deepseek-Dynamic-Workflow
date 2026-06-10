@@ -35,6 +35,7 @@ interface RunRecord {
   hitTokens: number;
   missTokens: number;
   totalTokens: number;
+  effectiveTokens: number;
   backend: string;
   artifactCount: number;
   transcriptLines: number;
@@ -51,6 +52,7 @@ interface DemoAudit {
   hitTokens: number;
   missTokens: number;
   totalTokens: number;
+  effectiveTokens: number;
   hitRate: number | null;
   passed: boolean;
   issues: string[];
@@ -70,6 +72,7 @@ interface ReleaseAudit {
     hitTokens: number;
     missTokens: number;
     totalTokens: number;
+    effectiveTokens: number;
     hitRate: number | null;
     passed: boolean;
   };
@@ -128,6 +131,7 @@ async function runReleaseAudit(args: ReleaseAuditArgs): Promise<ReleaseAudit> {
   const hitTokens = demos.reduce((sum, demo) => sum + demo.hitTokens, 0);
   const missTokens = demos.reduce((sum, demo) => sum + demo.missTokens, 0);
   const totalTokens = demos.reduce((sum, demo) => sum + demo.totalTokens, 0);
+  const effectiveTokens = demos.reduce((sum, demo) => sum + demo.effectiveTokens, 0);
   const cacheTokens = hitTokens + missTokens;
   const hitRate = cacheTokens > 0 ? hitTokens / cacheTokens : null;
   const aggregate = {
@@ -138,6 +142,7 @@ async function runReleaseAudit(args: ReleaseAuditArgs): Promise<ReleaseAudit> {
     hitTokens,
     missTokens,
     totalTokens,
+    effectiveTokens,
     hitRate,
     passed: demos.every((demo) => demo.passed) && hitRate !== null && hitRate >= args.threshold
   };
@@ -264,6 +269,7 @@ async function readRunRecord(summary: RunSummary): Promise<RunRecord | undefined
     hitTokens: summary.hitTokens,
     missTokens: summary.missTokens,
     totalTokens: summary.totalTokens,
+    effectiveTokens: summary.effectiveTokens,
     backend: manifest.backend,
     artifactCount: manifest.artifactCount,
     transcriptLines: await countTranscriptLines(summary.runDir)
@@ -308,6 +314,7 @@ function auditDemo(demo: DemoSpec, records: RunRecord[], threshold: number): Dem
   const hitTokens = demoRecords.reduce((sum, record) => sum + record.hitTokens, 0);
   const missTokens = demoRecords.reduce((sum, record) => sum + record.missTokens, 0);
   const totalTokens = demoRecords.reduce((sum, record) => sum + record.totalTokens, 0);
+  const effectiveTokens = demoRecords.reduce((sum, record) => sum + record.effectiveTokens, 0);
   const cacheTokens = hitTokens + missTokens;
   const hitRate = cacheTokens > 0 ? hitTokens / cacheTokens : null;
   const phases = new Set(demoRecords.map((record) => record.phase)).size;
@@ -333,6 +340,7 @@ function auditDemo(demo: DemoSpec, records: RunRecord[], threshold: number): Dem
     hitTokens,
     missTokens,
     totalTokens,
+    effectiveTokens,
     hitRate,
     passed: issues.length === 0,
     issues
@@ -412,6 +420,7 @@ function renderAudit(audit: ReleaseAudit): string {
       `reasonix=${demo.reasonixAgents}`,
       `artifacts=${demo.artifactAgents}`,
       `transcript_lines=${demo.transcriptLines}`,
+      `et=${formatEffectiveTokens(demo.effectiveTokens)}`,
       `cache=${formatRate(demo.hitRate)}`
     ].join(" "));
     for (const issue of demo.issues) {
@@ -429,6 +438,7 @@ function renderAudit(audit: ReleaseAudit): string {
       `artifacts=${audit.aggregate.artifactAgents}`,
       `hit=${audit.aggregate.hitTokens}`,
       `miss=${audit.aggregate.missTokens}`,
+      `et=${formatEffectiveTokens(audit.aggregate.effectiveTokens)}`,
       `cache=${formatRate(audit.aggregate.hitRate)}`
     ].join(" "),
     ""
@@ -444,6 +454,10 @@ function matchLine(text: string, key: string): string | undefined {
 
 function formatRate(rate: number | null): string {
   return rate === null ? "n/a" : `${(rate * 100).toFixed(2)}%`;
+}
+
+function formatEffectiveTokens(value: number): string {
+  return value.toFixed(1).replace(/\.0$/, "");
 }
 
 await main();

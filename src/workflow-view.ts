@@ -13,6 +13,7 @@ export interface WorkflowAgentView {
   backend?: string;
   context: string;
   tokens: number;
+  effectiveTokens: number;
   tools: number;
   durationMs: number;
   cacheHitRate: number | null;
@@ -55,6 +56,7 @@ interface RawWorkflowAgent {
   status?: WorkflowStatus;
   context?: string;
   tokens?: number;
+  effectiveTokens?: number;
   tools?: number;
   durationMs?: number;
   cacheHitRate?: number | null;
@@ -155,6 +157,7 @@ async function buildWorkflowFromRuns(options: {
       backend: manifest?.backend,
       context: truncate(metadata.context ?? context, 96),
       tokens: summary.totalTokens,
+      effectiveTokens: summary.effectiveTokens,
       tools: toolResults,
       durationMs: summary.latencyMs,
       cacheHitRate: summary.hitRate,
@@ -367,6 +370,7 @@ function normalizeWorkflow(raw: RawWorkflow): WorkflowView {
       status: agent.status ?? "completed",
       context: agent.context ?? agent.name,
       tokens: agent.tokens ?? 0,
+      effectiveTokens: agent.effectiveTokens ?? agent.tokens ?? 0,
       tools: agent.tools ?? 0,
       durationMs: agent.durationMs ?? 0,
       cacheHitRate: agent.cacheHitRate ?? null,

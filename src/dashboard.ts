@@ -22,6 +22,7 @@ interface WorkflowStats {
   failed: number;
   pending: number;
   tokens: number;
+  effectiveTokens: number;
   tools: number;
   weightedCacheHitRate: number | null;
   durationMs: number;
@@ -305,19 +306,23 @@ function renderDashboard(workflow: WorkflowView): string {
     }
     .agent-table th:nth-child(2),
     .agent-table td:nth-child(2) {
-      width: 120px;
+      width: 110px;
     }
     .agent-table th:nth-child(3),
     .agent-table td:nth-child(3) {
-      width: 90px;
+      width: 110px;
     }
     .agent-table th:nth-child(4),
     .agent-table td:nth-child(4) {
-      width: 116px;
+      width: 90px;
     }
     .agent-table th:nth-child(5),
     .agent-table td:nth-child(5) {
-      width: 130px;
+      width: 116px;
+    }
+    .agent-table th:nth-child(6),
+    .agent-table td:nth-child(6) {
+      width: 116px;
     }
     .agent-table td {
       padding: 2px 8px;
@@ -327,14 +332,14 @@ function renderDashboard(workflow: WorkflowView): string {
     }
     .agent-name {
       color: #7a7d80;
-      max-width: min(900px, calc(100vw - 620px));
+      max-width: min(900px, calc(100vw - 710px));
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
     .agent-context {
       display: block;
-      max-width: min(900px, calc(100vw - 620px));
+      max-width: min(900px, calc(100vw - 710px));
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -366,7 +371,7 @@ function renderDashboard(workflow: WorkflowView): string {
       flex-wrap: wrap;
       gap: 6px;
       margin-top: 4px;
-      max-width: min(900px, calc(100vw - 620px));
+      max-width: min(900px, calc(100vw - 710px));
     }
     .backend {
       display: inline-flex;
@@ -397,7 +402,7 @@ function renderDashboard(workflow: WorkflowView): string {
     }
     .artifact-panel {
       margin-top: 8px;
-      max-width: min(960px, calc(100vw - 620px));
+      max-width: min(960px, calc(100vw - 710px));
       color: #62666a;
       font-size: 12px;
       white-space: normal;
@@ -509,6 +514,7 @@ function renderDashboard(workflow: WorkflowView): string {
       <div class="meta-line">
         <span><strong>${stats.agents}</strong> Agents</span>
         <span><strong>${formatTokens(stats.tokens)}</strong> Tokens</span>
+        <span><strong>${formatTokens(stats.effectiveTokens)}</strong> Eff Tokens</span>
         <span><strong>${stats.running}</strong> Running</span>
         <span><strong>${formatRate(stats.weightedCacheHitRate)}</strong> Cache</span>
       </div>
@@ -573,6 +579,7 @@ function renderAgentTable(agents: WorkflowAgentView[]): string {
     <tr>
       <th>Agent</th>
       <th>Tokens</th>
+      <th>Eff</th>
       <th>Tools</th>
       <th>Cache</th>
       <th>Time</th>
@@ -595,6 +602,7 @@ function renderAgentRow(agent: WorkflowAgentView): string {
     ${renderArtifactPanel(agent)}
   </td>
   <td>${agent.tokens > 0 ? formatTokens(agent.tokens) : ""}</td>
+  <td>${agent.effectiveTokens > 0 ? formatTokens(agent.effectiveTokens) : ""}</td>
   <td>${agent.tools > 0 ? agent.tools : ""}</td>
   <td class="cache-cell">
     ${agent.cacheHitRate === null ? "" : formatRate(agent.cacheHitRate)}
@@ -653,6 +661,7 @@ function renderArtifactPreview(artifact: NonNullable<WorkflowAgentView["artifact
 function workflowStats(workflow: WorkflowView): WorkflowStats {
   const agents = workflow.phases.flatMap((phase) => phase.agents);
   const tokens = agents.reduce((sum, agent) => sum + agent.tokens, 0);
+  const effectiveTokens = agents.reduce((sum, agent) => sum + agent.effectiveTokens, 0);
   const tools = agents.reduce((sum, agent) => sum + agent.tools, 0);
   const durationMs = workflow.startedAt
     ? Math.max(0, Date.parse(workflow.endedAt ?? new Date().toISOString()) - Date.parse(workflow.startedAt))
@@ -675,6 +684,7 @@ function workflowStats(workflow: WorkflowView): WorkflowStats {
     failed: agents.filter((agent) => agent.status === "failed").length,
     pending: agents.filter((agent) => agent.status === "pending").length,
     tokens,
+    effectiveTokens,
     tools,
     weightedCacheHitRate: cacheWeighted.weight > 0 ? cacheWeighted.value / cacheWeighted.weight : null,
     durationMs
