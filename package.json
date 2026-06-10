@@ -1,6 +1,7 @@
 {
   "name": "@cf-dw/adapter-cli",
   "version": "0.1.0",
+  "description": "Affordable Dynamic Workflow: cache-first dynamic multi-agent workflows with DeepSeek prefix-cache observability.",
   "private": true,
   "license": "SEE LICENSE IN LICENSE.md",
   "type": "module",
