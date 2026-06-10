@@ -171,7 +171,7 @@ async function auditProjectFiles(cwd: string): Promise<Gate[]> {
     "LICENSE.md",
     "NOTICE.md",
     ".github/workflows/ci.yml",
-    "assets/cf-dw-hero.png",
+    "assets/deepseek-dynamic-workflow-avatar.png",
     "assets/cf-dw-architecture.png",
     "odw.config.json",
     "odw.reasonix.config.json",
@@ -204,13 +204,15 @@ async function auditProjectFiles(cwd: string): Promise<Gate[]> {
   const readme = await readTextFile(path.join(cwd, "README.md"));
   gates.push({
     name: "readme-positioning",
-    passed: readme.includes("Project Positioning / 项目定位"),
-    detail: "README includes bilingual positioning section."
+    passed: readme.includes("# DeepSeek Dynamic Workflow") && readme.includes("## Install With An Agent"),
+    detail: "README uses the DDW project name and includes an agent-install prompt."
   });
   gates.push({
     name: "readme-images",
-    passed: readme.includes("assets/cf-dw-hero.png") && readme.includes("assets/cf-dw-architecture.png"),
-    detail: "README references CFDW hero and architecture images."
+    passed:
+      readme.includes("assets/deepseek-dynamic-workflow-avatar.png") &&
+      readme.includes("assets/cf-dw-architecture.png"),
+    detail: "README references DDW avatar and architecture images."
   });
 
   const license = await readTextFile(path.join(cwd, "LICENSE.md"));
@@ -386,7 +388,8 @@ function parseArgs(argv: string[]): ReleaseAuditArgs {
 function usage(): string {
   return [
     "Usage:",
-    "  cf-dw-release-audit --runs-root .cf-dw/runs",
+    "  ddw-release-audit --runs-root .cf-dw/runs",
+    "  cf-dw-release-audit remains available as a legacy alias.",
     "",
     "Options:",
     "  --cwd <dir>          Default: current directory.",
@@ -400,7 +403,7 @@ function usage(): string {
 
 function renderAudit(audit: ReleaseAudit): string {
   const lines = [
-    "CFDW release audit",
+    "DDW release audit",
     `status: ${audit.passed ? "PASS" : "FAIL"}`,
     `threshold: ${formatRate(audit.threshold)}`,
     "",

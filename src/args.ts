@@ -72,8 +72,9 @@ export class HelpRequested extends Error {}
 export function usage(): string {
   return [
     "Usage:",
-    "  cf-dw-agent --cwd <workspace> --prompt <text> --cache-group-id <id> [--session-id <id|auto>] [options]",
-    "  cf-dw-agent --cwd <workspace> --prompt-file <file> --cache-group-id <id> [--session-id <id|auto>] [options]",
+    "  ddw-agent --cwd <workspace> --prompt <text> --cache-group-id <id> [--session-id <id|auto>] [options]",
+    "  ddw-agent --cwd <workspace> --prompt-file <file> --cache-group-id <id> [--session-id <id|auto>] [options]",
+    "  cf-dw-agent remains available as a legacy alias.",
     "",
     "Options:",
     "  --session-id <id|auto>    Default: auto.",

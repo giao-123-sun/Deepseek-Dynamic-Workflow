@@ -52,7 +52,7 @@ async function buildPrefix(args: PrefixArgs): Promise<void> {
 
   const content = await readTextFile(outputPath);
   const manifest = {
-    command: "cf-dw-prefix",
+    command: "ddw-prefix",
     output: path.relative(args.cwd, outputPath).split(path.sep).join("/"),
     output_sha256: sha256(content),
     options: {
@@ -122,7 +122,8 @@ function parseArgs(argv: string[]): PrefixArgs {
 function usage(): string {
   return [
     "Usage:",
-    "  cf-dw-prefix --cwd <workspace> [options]",
+    "  ddw-prefix --cwd <workspace> [options]",
+    "  cf-dw-prefix remains available as a legacy alias.",
     "",
     "Options:",
     "  --output <file>          Default: .cf-dw/prefix/cache-prefix.xml",

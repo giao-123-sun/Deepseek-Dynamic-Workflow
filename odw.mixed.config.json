@@ -7,7 +7,7 @@
   "schemaRetries": 0,
   "adapters": {
     "cf_dw_deepseek": {
-      "label": "Native C-FDW DeepSeek Agent",
+      "label": "Native DDW DeepSeek Agent",
       "command": [
         "node",
         "{source}/dist/index.js",

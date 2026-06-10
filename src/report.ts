@@ -98,7 +98,7 @@ function printVisualSummaries(summaries: RunSummary[]): void {
 
   const aggregate = aggregateSummaries(summaries);
   console.log("");
-  console.log("C-FDW Cache Report");
+  console.log("DDW Cache Report");
   console.log("==================");
   console.log(`Runs: ${aggregate.runs}  Turns: ${aggregate.turns}  Hit Rate: ${formatRate(aggregate.hitRate)}`);
   console.log(`Tokens: prompt=${aggregate.promptTokens} completion=${aggregate.completionTokens} total=${aggregate.totalTokens}`);

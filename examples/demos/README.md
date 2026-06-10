@@ -1,7 +1,7 @@
-# CFDW Demo Workflows
+# DDW Demo Workflows
 
 These demos are plain ODW workflow scripts. They use stable `C_FDW_*` metadata so
-CFDW can aggregate phases, agents, cache metrics, and artifacts into the
+DDW can aggregate phases, agents, cache metrics, and artifacts into the
 dashboard.
 
 Each demo keeps a local `structuredHandoff()` helper inside the workflow body.

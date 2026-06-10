@@ -1,4 +1,4 @@
-# CFDW GitHub 发布准备说明
+# DDW GitHub 发布准备说明
 
 **日期**：2026-06-10
 **目标版本**：`0.1.0-alpha`
@@ -69,13 +69,13 @@ GitHub auth   = not available in this local shell
 ## 建议发布措辞
 
 ```text
-CFDW v0.1.0-alpha is a non-commercial source-available release candidate.
-It demonstrates cache-first dynamic workflows on ODW with Native C-FDW and
+DDW v0.1.0-alpha is a non-commercial source-available release candidate.
+It demonstrates cache-first dynamic workflows on ODW with Native DDW and
 ReasoniX backends. The five demo workflows reached 88.20% aggregate warm-cache
 hit rate in local release audit.
 ```
 
 ## 不能在 CI 中做的事
 
-CI 不应运行 live DeepSeek demo，因为需要私有 `DEEPSEEK_API_KEY`，并且会产生 API 成本。
+CI 不应运行 live DeepSeek demo，因为需要私有 `DeepSeek_API_KEY`，并且会产生 API 成本。
 Live demo benchmark 应作为手动 release checklist 执行。

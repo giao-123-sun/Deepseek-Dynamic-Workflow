@@ -2,12 +2,12 @@
 
 ## 0.1.0-alpha
 
-Initial GitHub release candidate for CFDW as a cache-first dynamic workflow
+Initial GitHub release candidate for DDW as a cache-first dynamic workflow
 adapter project.
 
 ### Added
 
-- Native C-FDW DeepSeek adapter (`cf-dw-agent`).
+- Native DDW DeepSeek adapter (`cf-dw-agent`).
 - ReasoniX harness adapter (`cf-dw-reasonix-agent`).
 - Repomix stable prefix builder (`cf-dw-prefix`).
 - Cache/token report CLI (`cf-dw-report`).

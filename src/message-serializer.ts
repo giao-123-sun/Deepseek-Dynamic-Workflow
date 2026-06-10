@@ -23,7 +23,7 @@ export function buildMessages(session: AgentSession): ChatMessage[] {
   return [
     {
       role: "system",
-      content: "You are C-FDW AgentSession worker v0.1. Follow the cache-stable protocol exactly."
+      content: "You are DDW AgentSession worker v0.1. Follow the cache-stable protocol exactly."
     },
     {
       role: "user",

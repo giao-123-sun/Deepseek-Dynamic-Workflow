@@ -1,6 +1,6 @@
-# CFDW Non-Commercial Source License v1.0
+# DDW Non-Commercial Source License v1.0
 
-Copyright (c) 2026 CFDW contributors.
+Copyright (c) 2026 DDW contributors.
 
 This license grants limited rights to use, copy, modify, and distribute this
 software for non-commercial purposes only.

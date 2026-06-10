@@ -1,4 +1,4 @@
-C-FDW minimal prefix fixture.
+DDW minimal prefix fixture.
 
 This prefix is intentionally small for smoke tests.
 

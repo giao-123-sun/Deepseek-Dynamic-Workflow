@@ -133,9 +133,10 @@ function parseArgs(argv: string[]): DemoSuiteArgs {
 function usage(): string {
   return [
     "Usage:",
-    "  cf-dw-demo-suite --mode list",
-    "  cf-dw-demo-suite --mode dashboards",
-    "  cf-dw-demo-suite --mode run --odw-cli ../open-dynamic-workflows/dist/cli.js",
+    "  ddw-demo-suite --mode list",
+    "  ddw-demo-suite --mode dashboards",
+    "  ddw-demo-suite --mode run --odw-cli ../open-dynamic-workflows/dist/cli.js",
+    "  cf-dw-demo-suite remains available as a legacy alias.",
     "",
     "Options:",
     "  --mode <list|dashboards|run>  Default: dashboards.",

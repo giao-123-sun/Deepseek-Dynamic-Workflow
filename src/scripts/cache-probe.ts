@@ -14,7 +14,7 @@ const userId = process.env.DEEPSEEK_USER_ID ?? "cf_dw_cache_probe_v1";
 const model = process.env.DEEPSEEK_MODEL ?? "deepseek-v4-flash";
 
 const stablePrefix = [
-  "C-FDW cache probe stable prefix v1.",
+  "DDW cache probe stable prefix v1.",
   "This exact text should be reused across calls.",
   "Reply with one short sentence."
 ].join("\n");

@@ -1,4 +1,4 @@
-# C-FDW Adapter MVP 测试记录
+# DDW Adapter MVP 测试记录
 
 **日期**：2026-06-09
 **范围**：版本一 / ODW custom adapter 形态 / `cf-dw-agent` MVP
@@ -17,7 +17,7 @@
 10. ODW adapter 配置示例。
 11. `cf-dw-prefix`：调用本地 Repomix 生成稳定 prefix，并输出 manifest/hash。
 12. `cf-dw-dashboard`：生成动态工作流运行可视化 dashboard，支持 workflow JSON 和 usage ledger fallback。
-13. `.env` 自动加载：从当前目录和 `--cwd` 读取 `DEEPSEEK_API_KEY`。
+13. `.env` 自动加载：从当前目录和 `--cwd` 读取 `DeepSeek_API_KEY`。
 
 ## 已验证
 
@@ -51,7 +51,7 @@ Dry run complete for session agent_dry_run.
 配置：
 
 ```text
-model = deepseek-v4-flash
+model = DeepSeek-v4-flash
 cache_group_id = cf_dw_smoke_v1
 prefix = examples/prefix/minimal-prefix.md
 max_turns = 1
@@ -76,7 +76,7 @@ hit_rate = 75.00%
 验证点：
 
 1. DeepSeek API 调用正常。
-2. `deepseek-v4-flash` 模型可用。
+2. `DeepSeek-v4-flash` 模型可用。
 3. usage 中正常返回 cache hit/miss tokens。
 4. 相同 `cache_group_id` 和稳定 prefix 下，第二次请求出现明显 cache hit。
 
@@ -152,7 +152,7 @@ sha256=db81078c01b03be3acf2d2ac675a116d7324d6639f4c1f9d31c2eface67cc5b7
 验证点：
 
 1. 本地 Repomix devDependency 可用。
-2. `--include`、`--ignore`、`--compress` 可通过 C-FDW wrapper 传入。
+2. `--include`、`--ignore`、`--compress` 可通过 DDW wrapper 传入。
 3. prefix 文件和 manifest 正常生成。
 4. `cf-dw-agent --prefix-file` 可读取该真实 Repomix prefix。
 

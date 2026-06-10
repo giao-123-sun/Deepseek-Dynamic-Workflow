@@ -43,15 +43,15 @@ jobs:
           TAG_INPUT="${{ github.event.inputs.tag || '' }}"
           TAG_NAME="${TAG_INPUT:-${GITHUB_REF_NAME:-manual}}"
           COMMIT="$(git rev-parse --short=12 HEAD)"
-          ARCHIVE="cf-dw-${TAG_NAME}-${COMMIT}.zip"
-          PREFIX="cf-dw-${TAG_NAME}/"
+          ARCHIVE="ddw-${TAG_NAME}-${COMMIT}.zip"
+          PREFIX="ddw-${TAG_NAME}/"
           mkdir -p release
           git archive --format=zip --output="release/${ARCHIVE}" --prefix="${PREFIX}" HEAD
           SHA256="$(sha256sum "release/${ARCHIVE}" | awk '{print $1}')"
           BYTES="$(wc -c < "release/${ARCHIVE}" | tr -d ' ')"
           cat > "release/${ARCHIVE%.zip}.manifest.json" <<EOF
           {
-            "version": "cf-dw.release-pack.v1",
+            "version": "ddw.release-pack.v1",
             "tag": "${TAG_NAME}",
             "commit": "${COMMIT}",
             "archive": "${ARCHIVE}",

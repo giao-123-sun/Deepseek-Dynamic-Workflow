@@ -1,50 +1,102 @@
-# Deepseek Dynamic Workflow
+<p align="center">
+  <img src="assets/deepseek-dynamic-workflow-avatar.png" alt="DeepSeek Dynamic Workflow mascot avatar" width="180" />
+</p>
 
-[![CI](https://github.com/giao-123-sun/cf-dw/actions/workflows/ci.yml/badge.svg)](https://github.com/giao-123-sun/cf-dw/actions/workflows/ci.yml)
-[![Release Source](https://github.com/giao-123-sun/cf-dw/actions/workflows/release-source.yml/badge.svg)](https://github.com/giao-123-sun/cf-dw/actions/workflows/release-source.yml)
-![License](https://img.shields.io/badge/license-non--commercial_source--available-blue)
-![Cache First](https://img.shields.io/badge/design-cache--first-2ea44f)
-![DeepSeek](https://img.shields.io/badge/runtime-DeepSeek_prefix_cache-black)
+# DeepSeek Dynamic Workflow
 
-![Deepseek Dynamic Workflow banner](assets/cf-dw-hero.png)
+<p align="center">
+  <a href="https://github.com/giao-123-sun/DeepSeek-Dynamic-Workflow/actions/workflows/ci.yml"><img src="https://github.com/giao-123-sun/DeepSeek-Dynamic-Workflow/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/giao-123-sun/DeepSeek-Dynamic-Workflow/actions/workflows/release-source.yml"><img src="https://github.com/giao-123-sun/DeepSeek-Dynamic-Workflow/actions/workflows/release-source.yml/badge.svg" alt="release source"></a>
+  <img src="https://img.shields.io/badge/prompt_cache-88.20%25-brightgreen" alt="88.20% prompt cache hit">
+  <img src="https://img.shields.io/badge/agents-23_demo_runs-blue" alt="23 demo agents">
+  <img src="https://img.shields.io/badge/license-non--commercial_source--available-lightgrey" alt="non-commercial source-available license">
+</p>
 
-**Deepseek Dynamic Workflow (ADW)** is a cache-first harness for running
-dynamic multi-agent workflows without turning every serious run into an
-expensive experiment.
+<p align="center">
+  Cache-first dynamic workflows · DeepSeek prompt-cache metrics · agent artifacts · dashboard observability
+</p>
 
-ADW connects Open Dynamic Workflows style orchestration, DeepSeek prompt-cache
-affinity, stable Repomix prefixes, Native C-FDW workers, ReasoniX harness
-workers, run artifacts, and a workflow dashboard.
+<p align="center">
+  <b>DDW turns expensive multi-agent workflows into measurable, reusable, low-cost DeepSeek runs.</b><br>
+  Fan out agents, keep the prefix warm, pass artifacts across phases, and see cache hits instead of guessing.
+</p>
 
-> Current package and CLI commands still use the historical `cf-dw-*` name.
-> `CFDW` means Cache-First Dynamic Workflows. `ADW` is the public-facing project
-> name: Deepseek Dynamic Workflow.
+---
 
-> License note: ADW is source-available for non-commercial use only. Commercial
+**DeepSeek Dynamic Workflow (DDW)** is a cache-first dynamic workflow runtime
+for DeepSeek agents. It is built for runs where many agents search, inspect,
+verify, compare, and synthesize in parallel while reusing stable context and
+leaving behind auditable artifacts.
+
+> Current CLI builds also keep historical `cf-dw-*` commands, the `.cf-dw/`
+> runtime directory, and legacy protocol names for compatibility. The project
+> name is DeepSeek Dynamic Workflow, abbreviated as DDW.
+
+> License note: DDW is source-available for non-commercial use only. Commercial
 > use requires a separate written license. See [LICENSE.md](./LICENSE.md) and
 > [NOTICE.md](./NOTICE.md).
 
-## Why ADW
+## Quick Start
+
+```bash
+git clone https://github.com/giao-123-sun/DeepSeek-Dynamic-Workflow.git
+cd DeepSeek-Dynamic-Workflow
+npm install
+npm run build
+npm run check
+```
+
+Create a local `.env`:
+
+```text
+DEEPSEEK_API_KEY=...
+```
+
+`.env`, transcripts, run artifacts, logs, dashboards, and local reports are
+ignored by git.
+
+## Install With An Agent
+
+Copy this prompt into Codex, Claude Code, Whale, or another coding agent:
+
+```text
+Install DeepSeek Dynamic Workflow (DDW) in the current workspace.
+
+Repository: https://github.com/giao-123-sun/DeepSeek-Dynamic-Workflow
+
+Steps:
+1. If the repository is not present, clone it. If it is already present, enter it.
+2. Run npm install, npm run build, and npm run check.
+3. Create .env from .env.example if .env does not exist.
+4. Ask me to set DEEPSEEK_API_KEY locally if it is missing. Do not print secrets.
+5. Run npm run demo:dashboards to generate local dashboard files when possible.
+6. Run npm run release:audit if local demo artifacts are available.
+7. Report the install status, any failed command, and the next command I should run.
+
+Do not overwrite unrelated local changes.
+```
+
+## Why DDW
 
 动态工作流已经证明了它在智能体编排上的效率：复杂任务可以被拆成多个阶段，让多个 agent 并行探索、交叉验证、传递产物，并最终形成更高质量的结果。随着动态工作流技术走向开源，这种能力也应该继续流动，让更多开发者、研究者和团队能够使用、理解和改进它。
 
-ADW 的定位很直接：**把动态工作流做得更可负担**。很多真实场景里，成本是限制 multi-agent workflow 普及的关键因素；而 DeepSeek 的高缓存命中机制、低价格和稳定性能，给了我们一个新的工程机会：通过 cache-first 的设计，把动态工作流的运行成本显著降下来，同时保留并行智能体带来的效率和质量。
+DDW 的定位很直接：**把 DeepSeek 的高缓存命中优势接进动态工作流**。很多真实场景里，成本是限制 multi-agent workflow 普及的关键因素；而 DeepSeek 的高缓存命中机制、低价格和稳定性能，给了我们一个新的工程机会：通过 cache-first 的设计，把动态工作流的运行成本显著降下来，同时保留并行智能体带来的效率和质量。
 
 Dynamic workflows are powerful because they let many agents search, analyze,
-verify, and synthesize in parallel. ADW makes that pattern practical by adding a
+verify, and synthesize in parallel. DDW makes that pattern practical by adding a
 cache-stable runtime layer, measurable prompt-cache usage, artifact handoff, and
 workflow observability.
 
 ## At A Glance
 
-| Capability | What ADW provides |
+| What | Why it matters |
 |---|---|
-| Dynamic workflow adapter | Run ODW-style `agent()` calls through observable C-FDW sessions. |
-| Cache-first execution | Reuse stable Repomix prefixes and measure DeepSeek cache hits per run. |
-| Runtime choice | Use Native C-FDW for lightweight agents or ReasoniX for autonomous multi-step agents. |
-| Artifact handoff | Persist transcripts, JSON results, summaries, manifests, and downstream evidence. |
-| Dashboard | Inspect phases, agents, tokens, tools, cache hit rate, time, and artifacts. |
-| Demo suite | Five practical demos covering ROI, code audit, policy/legal mining, city research, and Web/CDP evidence extraction. |
+| **Cache-first dynamic workflows** | Stable prefixes keep shared context warm across many agents, so dynamic workflows become cheaper to run repeatedly. |
+| **Verified prompt-cache metrics** | Demo runs currently show **88.20% cache hit** across 23 agents, with cache hit/miss recorded per session. |
+| **Parallel agent phases** | Fan-out research, multi-perspective review, conflict detection, verification, and synthesis can run as staged workflows. |
+| **Artifacts by default** | Each agent can leave transcripts, JSON results, summaries, manifests, and files for downstream phases. |
+| **Dashboard observability** | See workflow status, phases, agent squares, tokens, tools, runtime, cache hit rate, and artifact previews. |
+| **Autonomous harness when needed** | Lightweight agents can stay cheap; harder agents can run in a tool-capable harness for multi-step work. |
 
 Verified release-demo metrics:
 
@@ -66,27 +118,27 @@ One workflow `agent()` becomes a cache-stable, observable agent run:
 
 ```text
 ODW agent(prompt)
--> ADW / C-FDW adapter
--> Native AgentSession or ReasoniX harness
+-> DDW adapter
+-> Native DDW AgentSession or autonomous harness
 -> DeepSeek-compatible model call
 -> usage ledger + transcript + artifacts
 -> workflow dashboard
 ```
 
-ADW is built for workflows where many agents work across phases, reuse a stable
+DDW is built for workflows where many agents work across phases, reuse a stable
 prefix, hand off structured artifacts, and expose real cache-hit metrics.
 
 ## Architecture
 
-![Deepseek Dynamic Workflow architecture](assets/cf-dw-architecture.png)
+![DeepSeek Dynamic Workflow architecture](assets/cf-dw-architecture.png)
 
 ```mermaid
 flowchart LR
   Author["Workflow Author"] --> ODW["Open Dynamic Workflows"]
   ODW --> Phase["phase / parallel / pipeline"]
-  Phase --> Adapter["ADW / C-FDW Adapter"]
+  Phase --> Adapter["DDW Adapter"]
   Adapter --> Router["Backend Router"]
-  Router --> Native["Native C-FDW AgentSession"]
+  Router --> Native["Native DDW AgentSession"]
   Router --> RX["ReasoniX Harness Agent"]
   Native --> DS["DeepSeek API"]
   RX --> DS
@@ -101,28 +153,9 @@ flowchart LR
   Artifacts --> Dashboard
 ```
 
-## Quick Start
-
-Install and build:
-
-```bash
-npm install
-npm run build
-npm run check
-```
-
-Create a local `.env`:
-
-```text
-DEEPSEEK_API_KEY=...
-```
-
-`.env`, transcripts, run artifacts, logs, dashboards, and local reports are
-ignored by git.
-
 ## Run One Agent
 
-Native C-FDW is best for cheap, controlled, lightweight agents such as
+Native DDW is best for cheap, controlled, lightweight agents such as
 classification, summary, tagging, simple JSON conversion, and read-only file
 inspection.
 
@@ -130,21 +163,21 @@ inspection.
 node dist/index.js `
   --cwd . `
   --prompt "List the top-level files and summarize the project." `
-  --cache-group-id adw_local_probe_v1 `
+  --cache-group-id ddw_local_probe_v1 `
   --session-id agent_001 `
   --max-turns 4
 ```
 
 ## Run One ReasoniX Harness Agent
 
-ReasoniX is best for more autonomous, multi-step agents: codebase analysis,
+The autonomous harness is best for more multi-step agents: codebase analysis,
 multi-tool phase work, future CDP/browser workflows, and high-value synthesis.
 
 ```bash
 node dist/reasonix-agent.js `
   --cwd . `
-  --prompt "Inspect README.md and explain what ADW does." `
-  --cache-group-id adw_reasonix_probe_v1 `
+  --prompt "Inspect README.md and explain what DDW does." `
+  --cache-group-id ddw_reasonix_probe_v1 `
   --session-id auto `
   --model deepseek-v4-flash `
   --effort low `
@@ -155,7 +188,7 @@ node dist/reasonix-agent.js `
 Current wrapper behavior:
 
 ```text
-one ODW agent = one ReasoniX run = one transcript = one C-FDW session
+one workflow agent = one harness run = one transcript = one DDW session
 ```
 
 ## Build A Stable Prefix
@@ -176,7 +209,7 @@ node dist/index.js `
   --cwd . `
   --prompt-file ./examples/prompts/workspace-summary.md `
   --prefix-file ./.cf-dw/prefix/cache-prefix.xml `
-  --cache-group-id adw_workspace_v1 `
+  --cache-group-id ddw_workspace_v1 `
   --session-id agent_workspace_001
 ```
 
@@ -275,7 +308,7 @@ runtime logs, dashboards, `dist/`, and dependencies.
 
 ## Run Artifacts
 
-Each Native C-FDW agent writes under:
+Each Native DDW agent writes under:
 
 ```text
 <cwd>/.cf-dw/runs/<session_id>/
@@ -312,12 +345,12 @@ concatenating variable natural-language stdout.
 - [GitHub release checklist / 发布执行清单](./docs/github-publish-checklist-cn.md)
 - [Token efficiency playbook](./docs/token-efficiency-playbook-cn.md)
 - [v0.1.0-alpha release notes](./docs/releases/v0.1.0-alpha.md)
-- [ODW + C-FDW real run report / 真实动态工作流运行报告](./docs/odw-real-run-report-cn.md)
+- [ODW + DDW real run report / 真实动态工作流运行报告](./docs/odw-real-run-report-cn.md)
 - [ReasoniX harness report / ReasoniX Harness 接入与试跑报告](./docs/reasonix-harness-run-report-cn.md)
 
 ## License
 
-ADW is source-available for non-commercial use only.
+DDW is source-available for non-commercial use only.
 
 No commercial use is granted by the public license. This includes SaaS,
 commercial hosting, paid services, product integration, commercial internal

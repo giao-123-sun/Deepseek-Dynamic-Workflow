@@ -57,11 +57,11 @@ async function main(): Promise<void> {
       : "ReasoniX harness without external prefix file.";
     const immutablePrefix = compactPrefix(rawImmutablePrefix, args.prefixMaxChars);
     const reasonixTask = [
-      "C-FDW CACHE-FIRST STATIC PREFIX",
+      "DDW CACHE-FIRST STATIC PREFIX",
       "The following prefix is stable across agents in this workflow. Treat it as repository and product context.",
       immutablePrefix,
       "",
-      "C-FDW WORKFLOW TASK",
+      "DDW WORKFLOW TASK",
       task
     ].join("\n");
     const sessionId = args.sessionId === "auto"
@@ -237,7 +237,7 @@ function parseArgs(argv: string[]): ReasonixArgs {
       parsed.values.system ??
         [
           "You are a non-interactive subagent inside an Open Dynamic Workflows run.",
-          "Complete the user task directly from the provided C-FDW static prefix and task text.",
+          "Complete the user task directly from the provided DDW static prefix and task text.",
           "Do not request an upgrade, do not emit NEEDS_PRO, and do not ask clarifying questions.",
           "Do not emit run_skill blocks, tool-call markup, commands for the host to run, or instructions for another agent.",
           "If the task asks for code or file analysis, use the provided prefix context and produce the requested analysis directly."
@@ -399,7 +399,7 @@ function compactPrefix(prefix: string, maxChars: number): string {
     `C_FDW_PREFIX_COMPACTED_CHARS: ${maxChars}`,
     prefix.slice(0, maxChars),
     "",
-    "[C-FDW prefix compacted for ReasoniX CLI argv safety]"
+    "[DDW prefix compacted for ReasoniX CLI argv safety]"
   ].join("\n");
 }
 

@@ -78,7 +78,7 @@ const protocol = await agent(
   tagged({
     phaseName: 'Phase B: Evidence Protocol',
     agentName: 'reasonix:evidence-protocol',
-    context: 'Convert playbooks into a CFDW artifact protocol for future CDP agents.',
+    context: 'Convert playbooks into a DDW artifact protocol for future CDP agents.',
     task: [
       'Synthesize a browser evidence artifact protocol.',
       'Include: required artifact files, dashboard fields, and pass/fail metrics.',

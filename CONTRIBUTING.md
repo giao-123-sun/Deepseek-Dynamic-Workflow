@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for improving CFDW. This repository is currently developed as a
+Thanks for improving DDW. This repository is currently developed as a
 non-commercial source-available project.
 
 ## Local Setup
@@ -25,7 +25,7 @@ Never commit `.env`, run transcripts, or private artifacts.
 - Prefer structured artifacts over large text blobs between phases.
 - Read cache metrics from API usage or transcripts, not from agent self-report.
 - Add focused demo or smoke coverage when changing adapters.
-- Keep Native C-FDW and ReasoniX backends independently runnable.
+- Keep Native DDW and ReasoniX backends independently runnable.
 
 ## Release Checklist
 

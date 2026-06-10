@@ -7,7 +7,7 @@
 
 ## 1. 是否已安装
 
-已安装到 C-FDW 本地项目：
+已安装到 DDW 本地项目：
 
 ```text
 cf-dw/node_modules/reasonix
@@ -23,13 +23,13 @@ Doctor 结果：
 
 ```text
 8 ok · 1 warn · 0 fail
-api key        set via env DEEPSEEK_API_KEY
-api reach      /models ok — 2 models (deepseek-v4-flash, deepseek-v4-pro)
+api key        set via env DeepSeek_API_KEY
+api reach      /models ok — 2 models (DeepSeek-v4-flash, DeepSeek-v4-pro)
 ```
 
 说明：
 
-1. `.env` 中的 `DEEPSEEK_API_KEY` 可被注入给 ReasoniX。
+1. `.env` 中的 `DeepSeek_API_KEY` 可被注入给 ReasoniX。
 2. DeepSeek API 可达。
 3. ReasoniX tokenizer、sessions、project 检查正常。
 
@@ -41,7 +41,7 @@ api reach      /models ok — 2 models (deepseek-v4-flash, deepseek-v4-pro)
 npx reasonix run \
   --no-config \
   --no-proxy \
-  --model deepseek-v4-flash \
+  --model DeepSeek-v4-flash \
   --effort low \
   --budget 0.02 \
   --transcript ./.cf-dw/reasonix/smoke-transcript.jsonl \
@@ -70,7 +70,7 @@ Transcript 中真实 usage 字段：
 }
 ```
 
-## 3. C-FDW ReasoniX wrapper
+## 3. DDW ReasoniX wrapper
 
 新增 wrapper：
 
@@ -88,9 +88,9 @@ cf-dw-reasonix-agent
 
 1. 读取 ODW `prompt_file`。
 2. 调用 `reasonix run`。
-3. 将 ReasoniX transcript 保存到 C-FDW run artifact。
-4. 将 ReasoniX usage 转换成 C-FDW `usage.jsonl`。
-5. 生成 C-FDW `session.json`，让 dashboard 可以直接读取。
+3. 将 ReasoniX transcript 保存到 DDW run artifact。
+4. 将 ReasoniX usage 转换成 DDW `usage.jsonl`。
+5. 生成 DDW `session.json`，让 dashboard 可以直接读取。
 
 注意：
 
@@ -149,7 +149,7 @@ Phase B: Synthesis
 
 ## 5. 贯穿缓存命中
 
-真实 C-FDW usage 聚合：
+真实 DDW usage 聚合：
 
 ```text
 agents      = 3
@@ -202,8 +202,8 @@ hasHorizontalOverflow = false
 
 ## 8. 下一步建议
 
-1. 给 dashboard 增加 backend 字段：`native-cfdw` / `reasonix`。
+1. 给 dashboard 增加 backend 字段：`native-DDW` / `reasonix`。
 2. 让 ODW config 可在同一 workflow 中混用两个 adapter，比较命中率和稳定性。
 3. 增加 `cf-dw-reasonix-agent --system` 配置暴露到 ODW adapter config。
-4. 把 ReasoniX transcript 的 `cost` 和 `prefixHash` 也映射到 C-FDW dashboard。
+4. 把 ReasoniX transcript 的 `cost` 和 `prefixHash` 也映射到 DDW dashboard。
 5. 用同一个 workflow 重复跑 3 次，比较 ReasoniX backend 的 cold/warm cache 曲线。

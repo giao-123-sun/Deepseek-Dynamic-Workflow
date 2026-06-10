@@ -1,4 +1,4 @@
-# CFDW GitHub 发布执行清单
+# DDW GitHub 发布执行清单
 
 **日期**：2026-06-10
 **本地路径**：`C:/Users/admin/Documents/agioa/agent_more/cf-dw`
@@ -16,7 +16,7 @@
 | README 项目图片 | 已完成 | `assets/cf-dw-hero.png`、`assets/cf-dw-architecture.png` |
 | 架构图视觉资产 | 已完成 | `assets/cf-dw-architecture.png` |
 | ODW custom adapter 形态 | 已完成 | `odw.config.json`、`odw.reasonix.config.json`、`odw.mixed.config.json` |
-| DeepSeek cache-first 接入 | 已完成 | `src/deepseek-client.ts`、`src/usage-ledger.ts`、`src/prefix-builder.ts` |
+| DeepSeek cache-first 接入 | 已完成 | `src/DeepSeek-client.ts`、`src/usage-ledger.ts`、`src/prefix-builder.ts` |
 | ReasoniX 多步 agent harness | 已完成 | `src/reasonix-agent.ts`、`examples/demos/*` |
 | 跨阶段结构化 handoff | 已完成 | demo 源码包含 `cf-dw.structured-handoff.v1`，由 `npm run release:audit` 检查 |
 | 5 个 demo 实测 | 已完成 | `docs/demo-benchmark-report-cn.md` |
@@ -106,9 +106,9 @@ git push origin v0.1.0-alpha
 ## 6. Alpha 发布说明建议
 
 ```text
-CFDW v0.1.0-alpha is a non-commercial source-available release candidate.
+DDW v0.1.0-alpha is a non-commercial source-available release candidate.
 It demonstrates cache-first dynamic workflows on Open Dynamic Workflows with
-Native C-FDW and ReasoniX harness backends. The five verified demo workflows
+Native DDW and ReasoniX harness backends. The five verified demo workflows
 reached 88.20% aggregate warm-cache hit rate in local DeepSeek release audit.
 ```
 

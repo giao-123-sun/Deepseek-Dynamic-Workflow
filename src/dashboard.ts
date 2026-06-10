@@ -88,13 +88,14 @@ function parseArgs(argv: string[]): DashboardArgs {
 function usage(): string {
   return [
     "Usage:",
-    "  cf-dw-dashboard --runs-root <dir> --output <file>",
-    "  cf-dw-dashboard --workflow-file <file> --output <file>",
+    "  ddw-dashboard --runs-root <dir> --output <file>",
+    "  ddw-dashboard --workflow-file <file> --output <file>",
+    "  cf-dw-dashboard remains available as a legacy alias.",
     "",
     "Options:",
     "  --workflow-file <file>  Workflow visualization JSON.",
     "  --workflow-tag <tag>    Filter run artifacts by C_FDW_WORKFLOW metadata.",
-    "  --run-id <id>           Filter by C-FDW run/session id.",
+    "  --run-id <id>           Filter by DDW run/session id.",
     "  --since <time>          Filter by run mtime. ISO datetime or relative 30m, 6h, 2d.",
     "  --latest-per-agent      Keep only the latest run for each phase/agent name.",
     "  --runs-root <dir>       Default: .cf-dw/runs",

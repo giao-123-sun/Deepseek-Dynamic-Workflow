@@ -43,14 +43,14 @@ async function runReleasePack(args: ReleasePackArgs): Promise<void> {
   const commit = (await captureCommand(["git", "rev-parse", "--short=12", "HEAD"], args.cwd)).trim();
   const outputDir = path.resolve(args.cwd, args.outputDir);
   await ensureDir(outputDir);
-  const archiveName = `cf-dw-${args.tag}-${commit}.zip`;
+  const archiveName = `ddw-${args.tag}-${commit}.zip`;
   const archivePath = path.join(outputDir, archiveName);
-  const prefix = `cf-dw-${args.tag}/`;
+  const prefix = `ddw-${args.tag}/`;
   await runCommand(["git", "archive", "--format=zip", "--output", archivePath, `--prefix=${prefix}`, "HEAD"], args.cwd);
 
   const bytes = await readFile(archivePath);
   const manifest = {
-    version: "cf-dw.release-pack.v1",
+    version: "ddw.release-pack.v1",
     tag: args.tag,
     commit,
     archive: archiveName,
@@ -64,7 +64,7 @@ async function runReleasePack(args: ReleasePackArgs): Promise<void> {
   await writeTextFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
 
   process.stdout.write([
-    "CFDW release pack created",
+    "DDW release pack created",
     `archive=${archivePath}`,
     `manifest=${manifestPath}`,
     `commit=${commit}`,
@@ -106,7 +106,8 @@ function parseArgs(argv: string[]): ReleasePackArgs {
 function usage(): string {
   return [
     "Usage:",
-    "  cf-dw-release-pack --tag v0.1.0-alpha",
+    "  ddw-release-pack --tag v0.1.0-alpha",
+    "  cf-dw-release-pack remains available as a legacy alias.",
     "",
     "Options:",
     "  --cwd <dir>            Default: current directory.",

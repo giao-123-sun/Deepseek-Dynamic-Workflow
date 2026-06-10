@@ -38,7 +38,7 @@ export async function buildImmutablePrefix(options: {
   const toolHash = sha256(toolProtocol);
 
   return [
-    "C-FDW CACHE PREFIX v1",
+    "DDW CACHE PREFIX v1",
     `cache_group_id: ${options.cacheGroupId}`,
     `repo_context_hash: sha256:${repoHash}`,
     `schema_contract_hash: sha256:${schemaHash}`,

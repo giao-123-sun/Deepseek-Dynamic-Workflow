@@ -1,6 +1,6 @@
 # Notice
 
-CFDW is distributed as source-available non-commercial software.
+DDW is distributed as source-available non-commercial software.
 
 This repository is not licensed for commercial use under its public license.
 Commercial use requires a separate written license from the copyright holder.

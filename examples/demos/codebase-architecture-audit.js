@@ -1,6 +1,6 @@
 export const meta = {
   name: 'cf-dw-codebase-architecture-audit',
-  description: 'Audit the CFDW codebase with parallel Native and ReasoniX agents.',
+  description: 'Audit the DDW codebase with parallel Native and ReasoniX agents.',
 }
 
 const workflowTag = 'demo-codebase-architecture-audit'
@@ -57,7 +57,7 @@ const moduleReports = await parallel([
           'Return Chinese notes: current behavior, one architectural risk, and one test to add.',
         ].join('\n'),
       }),
-      { label: 'native:session-ledger', phase: 'Phase A: Module Inspection', adapter: 'cf_dw_deepseek' },
+      { label: 'native:session-ledger', phase: 'Phase A: Module Inspection', adapter: 'cf_dw_DeepSeek' },
     ),
   () =>
     agent(
@@ -70,7 +70,7 @@ const moduleReports = await parallel([
           'Return Chinese notes: current visualization surface, missing release feature, and one improvement.',
         ].join('\n'),
       }),
-      { label: 'native:dashboard-view', phase: 'Phase A: Module Inspection', adapter: 'cf_dw_deepseek' },
+      { label: 'native:dashboard-view', phase: 'Phase A: Module Inspection', adapter: 'cf_dw_DeepSeek' },
     ),
   () =>
     agent(
@@ -80,7 +80,7 @@ const moduleReports = await parallel([
         context: 'Run a multi-step ReasoniX review of the harness adapter.',
         task: [
           'Perform a three-step architecture review of src/reasonix-agent.ts:',
-          '1. Identify how it maps ReasoniX transcript usage into C-FDW usage.',
+          '1. Identify how it maps ReasoniX transcript usage into DDW usage.',
           '2. Identify what artifact files it should produce for downstream phases.',
           '3. Recommend one hardening change for release.',
           'Return concise Chinese output.',

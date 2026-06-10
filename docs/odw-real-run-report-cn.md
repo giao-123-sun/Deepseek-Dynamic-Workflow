@@ -1,9 +1,9 @@
-# ODW + C-FDW 真实动态工作流运行报告
+# ODW + DDW 真实动态工作流运行报告
 
 **日期**：2026-06-10
 **ODW 仓库**：`https://github.com/xz1220/open-dynamic-workflows`
 **本地路径**：`C:/Users/admin/Documents/agioa/agent_more/open-dynamic-workflows`
-**C-FDW 路径**：`C:/Users/admin/Documents/agioa/agent_more/cf-dw`
+**DDW 路径**：`C:/Users/admin/Documents/agioa/agent_more/cf-dw`
 
 ## 1. 是否已经接入真实动态工作流
 
@@ -19,7 +19,7 @@ ODW workflow script
 -> DeepSeek AgentSession loop
 -> local read-only tools
 -> usage ledger / session artifacts
--> C-FDW workflow dashboard
+-> DDW workflow dashboard
 ```
 
 ODW 运行命令：
@@ -135,7 +135,7 @@ agent completion       = 5/5 agents completed
 如果要测“召回率”，需要定义标注集。例如：
 
 ```text
-目标：审计 C-FDW adapter 是否覆盖 6 个关键模块
+目标：审计 DDW adapter 是否覆盖 6 个关键模块
 gold modules:
   prefix builder
   AgentSession loop

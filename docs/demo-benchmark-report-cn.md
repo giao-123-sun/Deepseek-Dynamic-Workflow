@@ -1,4 +1,4 @@
-# CFDW 五个 Demo 实测 Benchmark 报告
+# DDW 五个 Demo 实测 Benchmark 报告
 
 **日期**：2026-06-10
 **范围**：GitHub 发布前 demo suite / ODW mixed adapter / DeepSeek cache-first / ReasoniX harness
@@ -8,7 +8,7 @@
 
 ## 1. 结论摘要
 
-5 个 demo 已完成真实 ODW 运行，覆盖 Native C-FDW、ReasoniX harness、并发 fan-out、多阶段 synthesis、政策冲突分析、多城市研究和 CDP-ready 浏览器证据协议设计。
+5 个 demo 已完成真实 ODW 运行，覆盖 Native DDW、ReasoniX harness、并发 fan-out、多阶段 synthesis、政策冲突分析、多城市研究和 CDP-ready 浏览器证据协议设计。
 
 最新有效 warm runs 汇总：
 
@@ -49,9 +49,9 @@ hit_rate = 202,880 / (202,880 + 27,142) = 88.20%
 
 ## 3. 关键发现
 
-### 3.1 Native C-FDW 的缓存表现很强
+### 3.1 Native DDW 的缓存表现很强
 
-Native C-FDW agent 接入完整 Repomix prefix 后，warm run 中多次达到 99% 左右缓存命中。
+Native DDW agent 接入完整 Repomix prefix 后，warm run 中多次达到 99% 左右缓存命中。
 
 典型结果：
 

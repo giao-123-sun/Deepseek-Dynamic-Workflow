@@ -5,7 +5,7 @@ export const meta = {
 
 const workflowTag = 'odw-real-demo'
 const workflowDescription =
-  '真实 ODW 动态工作流：并行检查 C-FDW adapter 的 prefix/session/tool/dashboard 模块，然后综合输出可用性、缓存命中和 demo 建议。'
+  '真实 ODW 动态工作流：并行检查 DDW adapter 的 prefix/session/tool/dashboard 模块，然后综合输出可用性、缓存命中和 demo 建议。'
 
 function tagged({ phaseName, agentName, context, task }) {
   return [
@@ -63,7 +63,7 @@ const planningTasks = [
   {
     phaseName: 'Phase B: Visualization & Demo Planning',
     agentName: 'plan:practical-demos',
-    context: '基于 README 和当前模块，提出实际可演示的 C-FDW 应用场景。',
+    context: '基于 README 和当前模块，提出实际可演示的 DDW 应用场景。',
     task: [
       'Use tools to inspect README.md and examples/odw.config.json.',
       'Return 5 practical demos for this product. For each demo include target user, input, workflow phases, and measurable metric.',
@@ -83,7 +83,7 @@ const synthesis = await agent(
   tagged({
     phaseName: 'Phase C: Synthesis',
     agentName: 'synthesis:system-readiness',
-    context: '综合前面四个 agent 输出，判断这个 ODW + C-FDW adapter 是否能真实跑东西。',
+    context: '综合前面四个 agent 输出，判断这个 ODW + DDW adapter 是否能真实跑东西。',
     task: [
       'Synthesize the reports below into one Chinese final report.',
       'Include: 1) whether the real ODW integration works, 2) cache-hit observations to look at, 3) risks, 4) best practical demos.',
