@@ -1,4 +1,4 @@
-# Affordable Dynamic Workflow
+# Deepseek Dynamic Workflow
 
 [![CI](https://github.com/giao-123-sun/cf-dw/actions/workflows/ci.yml/badge.svg)](https://github.com/giao-123-sun/cf-dw/actions/workflows/ci.yml)
 [![Release Source](https://github.com/giao-123-sun/cf-dw/actions/workflows/release-source.yml/badge.svg)](https://github.com/giao-123-sun/cf-dw/actions/workflows/release-source.yml)
@@ -6,9 +6,9 @@
 ![Cache First](https://img.shields.io/badge/design-cache--first-2ea44f)
 ![DeepSeek](https://img.shields.io/badge/runtime-DeepSeek_prefix_cache-black)
 
-![Affordable Dynamic Workflow banner](assets/cf-dw-hero.png)
+![Deepseek Dynamic Workflow banner](assets/cf-dw-hero.png)
 
-**Affordable Dynamic Workflow (ADW)** is a cache-first harness for running
+**Deepseek Dynamic Workflow (ADW)** is a cache-first harness for running
 dynamic multi-agent workflows without turning every serious run into an
 expensive experiment.
 
@@ -18,7 +18,7 @@ workers, run artifacts, and a workflow dashboard.
 
 > Current package and CLI commands still use the historical `cf-dw-*` name.
 > `CFDW` means Cache-First Dynamic Workflows. `ADW` is the public-facing project
-> name: Affordable Dynamic Workflow.
+> name: Deepseek Dynamic Workflow.
 
 > License note: ADW is source-available for non-commercial use only. Commercial
 > use requires a separate written license. See [LICENSE.md](./LICENSE.md) and
@@ -78,7 +78,7 @@ prefix, hand off structured artifacts, and expose real cache-hit metrics.
 
 ## Architecture
 
-![Affordable Dynamic Workflow architecture](assets/cf-dw-architecture.png)
+![Deepseek Dynamic Workflow architecture](assets/cf-dw-architecture.png)
 
 ```mermaid
 flowchart LR
