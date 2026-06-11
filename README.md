@@ -231,6 +231,25 @@ npm run setup:odw
 This installs ODW under `.cf-dw/vendor/open-dynamic-workflows/` and builds its
 CLI. `npm run demo:run` also runs this setup automatically when ODW is missing.
 
+For a normal observable run, use the DDW runner. It starts the ODW live dashboard,
+opens it in the browser, runs the workflow, then generates the DDW dashboard and
+self-evolved agent skill notes:
+
+```bash
+npm run workflow:run -- \
+  --script ./examples/awesome-dynamic-workflows-style-study.js \
+  --config ./odw.research.config.json \
+  --workflow-tag awesome-dynamic-workflows-style-study \
+  --output ./.cf-dw/reports/awesome-dynamic-workflows-style-study-latest.html
+```
+
+After each tagged run, DDW writes self-evolve artifacts under
+`.cf-dw/self-evolve/`:
+
+- `active-skills.md` is automatically injected into future DDW agent sessions;
+- `*-skill-evolution.md` records who learned which skill for which future agent;
+- `*-skill-candidates.json` keeps the scored machine-readable evidence.
+
 Native backend:
 
 ```bash

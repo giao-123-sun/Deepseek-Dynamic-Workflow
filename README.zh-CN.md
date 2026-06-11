@@ -198,6 +198,18 @@ Dashboard 展示 workflow title、status、duration、total tokens、phases、ag
 
 DDW 会通过 `npm run setup:odw` 把 Open Dynamic Workflows 安装到 `.cf-dw/vendor/open-dynamic-workflows/` 并构建它的 CLI。`npm run demo:run` 在缺少 ODW 时会自动先执行这一步，所以新 clone 的项目可以直接跑完整 demo 链路。
 
+正常需要可视化运行时，推荐用 DDW runner。它会启动 ODW live dashboard 并打开浏览器，workflow 结束后再生成 DDW dashboard 和 self-evolve 技能沉淀：
+
+```bash
+npm run workflow:run -- \
+  --script ./examples/awesome-dynamic-workflows-style-study.js \
+  --config ./odw.research.config.json \
+  --workflow-tag awesome-dynamic-workflows-style-study \
+  --output ./.cf-dw/reports/awesome-dynamic-workflows-style-study-latest.html
+```
+
+跑后产物会写到 `.cf-dw/self-evolve/`：`active-skills.md` 会自动注入后续 DDW agent；`*-skill-evolution.md` 标明哪个 agent 为哪个未来 agent 沉淀了什么技能；`*-skill-candidates.json` 保留评分证据。
+
 ```bash
 npm run setup:odw
 npm run demo:run

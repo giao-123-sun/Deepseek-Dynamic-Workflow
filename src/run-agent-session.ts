@@ -5,6 +5,7 @@ import { readTextFile, sha256 } from "./fs-utils.js";
 import { buildMessages } from "./message-serializer.js";
 import { parseModelResponse } from "./model-response.js";
 import { buildImmutablePrefix } from "./prefix-builder.js";
+import { loadSelfEvolveContext } from "./self-evolve-context.js";
 import { SessionStore } from "./session-store.js";
 import { dispatchTools } from "./tool-router.js";
 import type { AgentCliOptions, AgentRunResult } from "./types.js";
@@ -20,12 +21,16 @@ export async function runAgentSession(options: AgentCliOptions): Promise<AgentRu
   const effectiveSessionId = options.sessionId === "auto"
     ? `agent_${sha256(`${Date.now()}_${process.pid}_${task}`).slice(0, 18)}`
     : options.sessionId;
-  const immutablePrefix = await buildImmutablePrefix({
+  const baseImmutablePrefix = await buildImmutablePrefix({
     cwd: options.cwd,
     cacheGroupId: options.cacheGroupId,
     prefixFile: options.prefixFile,
     schemaFile: options.schemaFile
   });
+  const selfEvolveContext = await loadSelfEvolveContext(options.cwd);
+  const immutablePrefix = selfEvolveContext
+    ? `${baseImmutablePrefix}\n\n${selfEvolveContext}`
+    : baseImmutablePrefix;
 
   const outDir = options.outDir ?? path.join(options.cwd, ".cf-dw", "runs", effectiveSessionId);
   const store = new SessionStore(outDir);

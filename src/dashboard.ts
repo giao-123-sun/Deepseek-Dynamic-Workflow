@@ -138,13 +138,13 @@ function renderDashboard(workflow: WorkflowView): string {
       margin: 0;
       background: var(--bg);
       color: var(--text);
-      font: 16px/1.45 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+      font: 14px/1.4 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
       letter-spacing: 0;
     }
     main {
-      max-width: 1536px;
+      max-width: 1120px;
       margin: 0 auto;
-      padding: 0 18px 28px;
+      padding: 10px 16px 24px;
     }
     .top {
       position: relative;
@@ -155,59 +155,59 @@ function renderDashboard(workflow: WorkflowView): string {
       grid-template-columns: 18px minmax(0, 1fr) auto;
       align-items: start;
       gap: 10px;
-      min-height: 34px;
+      min-height: 28px;
     }
     .status-dot {
       width: 11px;
       height: 11px;
       border-radius: 999px;
-      margin-top: 13px;
+      margin-top: 9px;
       background: var(--done);
     }
     .status-dot.running { background: var(--running); }
     .status-dot.failed { background: var(--failed); }
     h1 {
       margin: 0;
-      font-size: 28px;
+      font-size: 21px;
       font-weight: 500;
       line-height: 1.2;
     }
     .runtime {
       color: var(--muted);
-      font-size: 24px;
+      font-size: 18px;
       font-variant-numeric: tabular-nums;
       padding-top: 2px;
       white-space: nowrap;
     }
     .meta-line {
-      margin-left: 34px;
+      margin-left: 28px;
       display: flex;
       flex-wrap: wrap;
-      gap: 14px;
+      gap: 12px;
       color: var(--muted);
-      font-size: 25px;
-      line-height: 1.45;
+      font-size: 17px;
+      line-height: 1.35;
     }
     .meta-line strong {
       color: #2f3133;
       font-weight: 500;
     }
     .description {
-      margin: 22px 18px 0;
-      padding: 16px 18px;
-      border-radius: 10px;
+      margin: 16px 12px 0;
+      padding: 10px 12px;
+      border-radius: 8px;
       background: var(--soft);
       color: #303134;
-      font-size: 25px;
+      font-size: 16px;
       overflow-wrap: anywhere;
     }
     .section-title {
-      margin: 48px 36px 12px;
-      font-size: 26px;
+      margin: 32px 22px 10px;
+      font-size: 19px;
       font-weight: 600;
     }
     .phase {
-      margin: 0 18px 14px;
+      margin: 0 12px 10px;
       border-radius: 8px;
       background: transparent;
     }
@@ -217,8 +217,8 @@ function renderDashboard(workflow: WorkflowView): string {
     summary {
       list-style: none;
       cursor: pointer;
-      padding: 12px 16px;
-      min-height: 54px;
+      padding: 10px 12px;
+      min-height: 42px;
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 12px;
@@ -226,17 +226,17 @@ function renderDashboard(workflow: WorkflowView): string {
     }
     summary::-webkit-details-marker { display: none; }
     .phase:not([open]) summary {
-      padding-top: 16px;
-      padding-bottom: 14px;
+      padding-top: 12px;
+      padding-bottom: 10px;
     }
     .phase-name {
-      font-size: 25px;
+      font-size: 17px;
       color: #3b3d40;
       overflow-wrap: anywhere;
     }
     .chevron {
       color: #a9abad;
-      font-size: 30px;
+      font-size: 22px;
       line-height: 1;
       transform: rotate(0deg);
       transition: transform 140ms ease;
@@ -247,15 +247,15 @@ function renderDashboard(workflow: WorkflowView): string {
     .agent-grid {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      padding: 0 16px 16px;
-      max-width: 660px;
+      gap: 5px;
+      padding: 0 12px 12px;
+      max-width: 520px;
     }
     .agent-dot {
       position: relative;
-      width: 12px;
-      height: 12px;
-      border-radius: 4px;
+      width: 9px;
+      height: 9px;
+      border-radius: 3px;
       background: var(--done);
       flex: 0 0 auto;
     }
@@ -283,14 +283,14 @@ function renderDashboard(workflow: WorkflowView): string {
     }
     .agent-dot:hover::after { opacity: 1; }
     .phase-body {
-      padding: 0 16px 18px;
+      padding: 0 12px 14px;
     }
     .agent-table {
       width: 100%;
       border-collapse: collapse;
       table-layout: fixed;
       color: var(--muted);
-      font-size: 25px;
+      font-size: 15px;
       font-variant-numeric: tabular-nums;
     }
     .agent-table th {
@@ -307,40 +307,40 @@ function renderDashboard(workflow: WorkflowView): string {
     }
     .agent-table th:nth-child(2),
     .agent-table td:nth-child(2) {
-      width: 110px;
+      width: 84px;
     }
     .agent-table th:nth-child(3),
     .agent-table td:nth-child(3) {
-      width: 110px;
+      width: 84px;
     }
     .agent-table th:nth-child(4),
     .agent-table td:nth-child(4) {
-      width: 90px;
+      width: 70px;
     }
     .agent-table th:nth-child(5),
     .agent-table td:nth-child(5) {
-      width: 116px;
+      width: 88px;
     }
     .agent-table th:nth-child(6),
     .agent-table td:nth-child(6) {
-      width: 116px;
+      width: 92px;
     }
     .agent-table td {
-      padding: 2px 8px;
+      padding: 2px 6px;
       vertical-align: top;
       text-align: right;
       white-space: nowrap;
     }
     .agent-name {
       color: #7a7d80;
-      max-width: min(900px, calc(100vw - 710px));
+      max-width: min(640px, calc(100vw - 520px));
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
     .agent-context {
       display: block;
-      max-width: min(900px, calc(100vw - 710px));
+      max-width: min(640px, calc(100vw - 520px));
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -372,7 +372,7 @@ function renderDashboard(workflow: WorkflowView): string {
       flex-wrap: wrap;
       gap: 6px;
       margin-top: 4px;
-      max-width: min(900px, calc(100vw - 710px));
+      max-width: min(640px, calc(100vw - 520px));
     }
     .backend {
       display: inline-flex;
@@ -403,7 +403,7 @@ function renderDashboard(workflow: WorkflowView): string {
     }
     .artifact-panel {
       margin-top: 8px;
-      max-width: min(960px, calc(100vw - 710px));
+      max-width: min(700px, calc(100vw - 520px));
       color: #62666a;
       font-size: 12px;
       white-space: normal;
@@ -469,28 +469,28 @@ function renderDashboard(workflow: WorkflowView): string {
       overflow-wrap: anywhere;
     }
     @media (max-width: 860px) {
-      main { padding: 8px 12px 24px; }
-      h1 { font-size: 22px; }
-      .runtime { font-size: 18px; }
+      main { padding: 8px 10px 22px; }
+      h1 { font-size: 20px; }
+      .runtime { font-size: 16px; }
       .meta-line {
         margin-left: 28px;
-        font-size: 18px;
+        font-size: 15px;
         gap: 10px;
       }
       .description {
         margin: 16px 0 0;
-        font-size: 18px;
+        font-size: 15px;
       }
       .section-title {
         margin: 32px 0 10px;
-        font-size: 22px;
+        font-size: 18px;
       }
       .phase { margin-left: 0; margin-right: 0; }
-      .phase-name { font-size: 20px; }
+      .phase-name { font-size: 17px; }
       .agent-table {
         display: block;
         overflow-x: auto;
-        font-size: 17px;
+        font-size: 14px;
       }
       .agent-name,
       .agent-context,
