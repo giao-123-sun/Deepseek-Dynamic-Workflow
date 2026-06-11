@@ -41,6 +41,7 @@ cd DeepSeek-Dynamic-Workflow
 npm install
 npm run build
 npm run check
+npm run setup:odw
 ```
 
 创建本地 `.env`：
@@ -65,9 +66,10 @@ Steps:
 2. Run npm install, npm run build, and npm run check.
 3. Create .env from .env.example if .env does not exist.
 4. Ask me to set DEEPSEEK_API_KEY locally if it is missing. Do not print secrets.
-5. Run npm run demo:dashboards to generate local dashboard files when possible.
-6. Run npm run release:audit if local demo artifacts are available.
-7. Report the install status, any failed command, and the next command I should run.
+5. Run npm run setup:odw so the bundled Open Dynamic Workflows runtime is cloned and built under .cf-dw/vendor/.
+6. Run npm run demo:dashboards to generate local dashboard files when possible.
+7. Run npm run release:audit if local demo artifacts are available.
+8. Report the install status, any failed command, and the next command I should run.
 
 Do not overwrite unrelated local changes.
 ```
@@ -194,7 +196,10 @@ Dashboard 展示 workflow title、status、duration、total tokens、phases、ag
 
 ## Demo Suite
 
+DDW 会通过 `npm run setup:odw` 把 Open Dynamic Workflows 安装到 `.cf-dw/vendor/open-dynamic-workflows/` 并构建它的 CLI。`npm run demo:run` 在缺少 ODW 时会自动先执行这一步，所以新 clone 的项目可以直接跑完整 demo 链路。
+
 ```bash
+npm run setup:odw
 npm run demo:run
 npm run demo:dashboards
 npm run release:audit

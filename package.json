@@ -14,6 +14,7 @@
     "ddw-demo-suite": "./dist/scripts/demo-suite.js",
     "ddw-release-audit": "./dist/scripts/release-audit.js",
     "ddw-release-pack": "./dist/scripts/release-pack.js",
+    "ddw-setup-odw": "./dist/scripts/setup-odw.js",
     "cf-dw-agent": "./dist/index.js",
     "cf-dw-prefix": "./dist/prefix-cli.js",
     "cf-dw-reasonix-agent": "./dist/reasonix-agent.js",
@@ -21,7 +22,8 @@
     "cf-dw-dashboard": "./dist/dashboard.js",
     "cf-dw-demo-suite": "./dist/scripts/demo-suite.js",
     "cf-dw-release-audit": "./dist/scripts/release-audit.js",
-    "cf-dw-release-pack": "./dist/scripts/release-pack.js"
+    "cf-dw-release-pack": "./dist/scripts/release-pack.js",
+    "cf-dw-setup-odw": "./dist/scripts/setup-odw.js"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
@@ -33,7 +35,8 @@
     "dashboard": "node ./dist/dashboard.js",
     "demo:list": "node ./dist/scripts/demo-suite.js --mode list",
     "demo:dashboards": "node ./dist/scripts/demo-suite.js --mode dashboards",
-    "demo:run": "node ./dist/scripts/demo-suite.js --mode run",
+    "setup:odw": "node ./dist/scripts/setup-odw.js",
+    "demo:run": "node ./dist/scripts/setup-odw.js --if-missing && node ./dist/scripts/demo-suite.js --mode run",
     "release:audit": "node ./dist/scripts/release-audit.js",
     "release:pack": "node ./dist/scripts/release-pack.js",
     "probe:cache": "node ./dist/scripts/cache-probe.js"

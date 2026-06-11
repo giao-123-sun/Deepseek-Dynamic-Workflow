@@ -2,7 +2,7 @@
 
 **日期**：2026-06-10
 **ODW 仓库**：`https://github.com/xz1220/open-dynamic-workflows`
-**本地路径**：`C:/Users/admin/Documents/agioa/agent_more/open-dynamic-workflows`
+**本地路径**：`<DDW>/.cf-dw/vendor/open-dynamic-workflows`
 **DDW 路径**：`C:/Users/admin/Documents/agioa/agent_more/cf-dw`
 
 ## 1. 是否已经接入真实动态工作流
@@ -25,7 +25,9 @@ ODW workflow script
 ODW 运行命令：
 
 ```bash
-node ../open-dynamic-workflows/dist/cli.js run ./examples/odw-real-demo.js \
+npm run setup:odw
+
+node ./.cf-dw/vendor/open-dynamic-workflows/dist/cli.js run ./examples/odw-real-demo.js \
   --config ./odw.config.json \
   --runs-root ./.odw/runs \
   --wait \

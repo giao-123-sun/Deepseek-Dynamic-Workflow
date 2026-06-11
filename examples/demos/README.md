@@ -12,7 +12,9 @@ is `cf-dw.structured-handoff.v1`.
 Run one demo:
 
 ```bash
-node ../../open-dynamic-workflows/dist/cli.js run ./examples/demos/cache-roi-benchmark.js \
+npm run setup:odw
+
+node ./.cf-dw/vendor/open-dynamic-workflows/dist/cli.js run ./examples/demos/cache-roi-benchmark.js \
   --config ./odw.mixed.config.json \
   --runs-root ./.odw/runs \
   --wait \

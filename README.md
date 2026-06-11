@@ -48,6 +48,7 @@ cd DeepSeek-Dynamic-Workflow
 npm install
 npm run build
 npm run check
+npm run setup:odw
 ```
 
 Create a local `.env`:
@@ -73,9 +74,10 @@ Steps:
 2. Run npm install, npm run build, and npm run check.
 3. Create .env from .env.example if .env does not exist.
 4. Ask me to set DEEPSEEK_API_KEY locally if it is missing. Do not print secrets.
-5. Run npm run demo:dashboards to generate local dashboard files when possible.
-6. Run npm run release:audit if local demo artifacts are available.
-7. Report the install status, any failed command, and the next command I should run.
+5. Run npm run setup:odw so the bundled Open Dynamic Workflows runtime is cloned and built under .cf-dw/vendor/.
+6. Run npm run demo:dashboards to generate local dashboard files when possible.
+7. Run npm run release:audit if local demo artifacts are available.
+8. Report the install status, any failed command, and the next command I should run.
 
 Do not overwrite unrelated local changes.
 ```
@@ -219,10 +221,20 @@ node dist/index.js `
 
 ## Run With ODW
 
+DDW bootstraps Open Dynamic Workflows locally instead of requiring a sibling
+checkout:
+
+```bash
+npm run setup:odw
+```
+
+This installs ODW under `.cf-dw/vendor/open-dynamic-workflows/` and builds its
+CLI. `npm run demo:run` also runs this setup automatically when ODW is missing.
+
 Native backend:
 
 ```bash
-node ../open-dynamic-workflows/dist/cli.js run ./examples/odw-real-demo.js `
+node ./.cf-dw/vendor/open-dynamic-workflows/dist/cli.js run ./examples/odw-real-demo.js `
   --config ./odw.config.json `
   --runs-root ./.odw/runs `
   --wait `
@@ -232,7 +244,7 @@ node ../open-dynamic-workflows/dist/cli.js run ./examples/odw-real-demo.js `
 ReasoniX backend:
 
 ```bash
-node ../open-dynamic-workflows/dist/cli.js run ./examples/odw-reasonix-demo.js `
+node ./.cf-dw/vendor/open-dynamic-workflows/dist/cli.js run ./examples/odw-reasonix-demo.js `
   --config ./odw.reasonix.config.json `
   --runs-root ./.odw/runs `
   --wait `

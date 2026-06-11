@@ -117,7 +117,9 @@ odw.reasonix.config.json
 运行命令：
 
 ```bash
-node ../open-dynamic-workflows/dist/cli.js run ./examples/odw-reasonix-demo.js \
+npm run setup:odw
+
+node ./.cf-dw/vendor/open-dynamic-workflows/dist/cli.js run ./examples/odw-reasonix-demo.js \
   --config ./odw.reasonix.config.json \
   --runs-root ./.odw/runs \
   --wait \

@@ -35,7 +35,7 @@ Native DDW agent 负责简单、低成本、强可控的轻量任务。
 3. `cf-dw-prefix`：通过 Repomix 生成稳定 workspace prefix。
 4. `cf-dw-report`：统计 run / runs root 的 token、cache hit、cache miss。
 5. `cf-dw-dashboard`：生成动态工作流可视化 HTML。
-6. ODW 真实接入：已 clone、build 并实际运行 Open Dynamic Workflows。
+6. ODW 真实接入：通过 `npm run setup:odw` clone/build Open Dynamic Workflows 到 `.cf-dw/vendor/open-dynamic-workflows`，并实际运行 workflow。
 7. ReasoniX 真实接入：已安装 `reasonix@0.53.2` 并完成 ODW + ReasoniX demo。
 
 当前 release-demo 汇总结果：

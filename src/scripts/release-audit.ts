@@ -175,6 +175,7 @@ async function auditProjectFiles(cwd: string): Promise<Gate[]> {
     ".github/workflows/ci.yml",
     "assets/deepseek-dynamic-workflow-avatar.png",
     "assets/cf-dw-architecture.png",
+    "src/scripts/setup-odw.ts",
     "odw.config.json",
     "odw.reasonix.config.json",
     "odw.mixed.config.json"
