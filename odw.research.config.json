@@ -1,0 +1,36 @@
+{
+  "defaultAdapter": "ddw_research",
+  "concurrency": 3,
+  "maxAgents": 12,
+  "workspaceMode": "inplace",
+  "timeout": 1200,
+  "schemaRetries": 0,
+  "adapters": {
+    "ddw_research": {
+      "label": "DDW Research Agent",
+      "command": [
+        "node",
+        "{source}/dist/index.js",
+        "--cwd",
+        "{source}",
+        "--prompt-file",
+        "{prompt_file}",
+        "--prefix-file",
+        "{source}/.cf-dw/prefix/cache-prefix.xml",
+        "--cache-group-id",
+        "ddw_awesome_dynamic_workflows_v1",
+        "--session-id",
+        "auto",
+        "--model",
+        "deepseek-v4-flash",
+        "--max-turns",
+        "10",
+        "--temperature",
+        "0",
+        "--allow-shell",
+        "--allow-write"
+      ],
+      "timeout": 1200
+    }
+  }
+}

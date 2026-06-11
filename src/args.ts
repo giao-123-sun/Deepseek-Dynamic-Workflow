@@ -15,7 +15,7 @@ export function parseArgs(argv: string[]): AgentCliOptions {
     }
 
     const key = token.slice(2);
-    if (key === "dry-run" || key === "help") {
+    if (key === "dry-run" || key === "allow-shell" || key === "allow-write" || key === "help") {
       values.set(key, true);
       continue;
     }
@@ -63,7 +63,9 @@ export function parseArgs(argv: string[]): AgentCliOptions {
     maxTurns: parsePositiveInt(String(values.get("max-turns") ?? "6"), "max-turns"),
     temperature: parseNumber(String(values.get("temperature") ?? "0.2"), "temperature"),
     baseUrl: String(values.get("base-url") ?? DEFAULT_BASE_URL).replace(/\/+$/, ""),
-    dryRun: Boolean(values.get("dry-run"))
+    dryRun: Boolean(values.get("dry-run")),
+    allowShell: Boolean(values.get("allow-shell")),
+    allowWrite: Boolean(values.get("allow-write"))
   };
 }
 
@@ -87,6 +89,8 @@ export function usage(): string {
     "  --temperature <n>          Default: 0.2.",
     "  --base-url <url>           Default: https://api.deepseek.com.",
     "  --dry-run                  Create local artifacts without calling DeepSeek.",
+    "  --allow-shell              Enable run_shell for trusted workflow agents.",
+    "  --allow-write              Enable write_file for trusted workflow agents.",
     "  --help                     Show this help."
   ].join("\n");
 }

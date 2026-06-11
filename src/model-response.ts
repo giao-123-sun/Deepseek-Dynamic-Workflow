@@ -68,7 +68,17 @@ function extractJson(content: string): string {
 }
 
 function isToolName(value: unknown): value is ToolName {
-  return value === "read_file" || value === "list_directory" || value === "grep";
+  return typeof value === "string" && [
+    "read_file",
+    "list_directory",
+    "grep",
+    "write_file",
+    "run_shell",
+    "github_search_repos",
+    "github_get_readme",
+    "web_search",
+    "fetch_url"
+  ].includes(value);
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

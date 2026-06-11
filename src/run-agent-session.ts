@@ -57,7 +57,10 @@ export async function runAgentSession(options: AgentCliOptions): Promise<AgentRu
   const client = new DeepSeekClient({ apiKey, baseUrl: options.baseUrl });
 
   for (let turn = 1; turn <= options.maxTurns; turn += 1) {
-    const messages = buildMessages(session);
+    const messages = buildMessages(session, {
+      allowShell: options.allowShell,
+      allowWrite: options.allowWrite
+    });
     const started = Date.now();
     const response = await client.chat({
       model: options.model,
@@ -108,7 +111,10 @@ export async function runAgentSession(options: AgentCliOptions): Promise<AgentRu
       };
     }
 
-    const results = await dispatchTools(options.cwd, parsed.calls);
+    const results = await dispatchTools(options.cwd, parsed.calls, {
+      allowShell: options.allowShell,
+      allowWrite: options.allowWrite
+    });
     for (const result of results) {
       await store.append(session, {
         kind: "tool_result",

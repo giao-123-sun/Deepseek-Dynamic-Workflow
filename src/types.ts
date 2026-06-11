@@ -21,6 +21,8 @@ export interface AgentCliOptions {
   temperature: number;
   baseUrl: string;
   dryRun: boolean;
+  allowShell: boolean;
+  allowWrite: boolean;
 }
 
 export interface AgentSession {
@@ -87,7 +89,16 @@ export interface UsageLedgerEntry {
   createdAt: string;
 }
 
-export type ToolName = "read_file" | "list_directory" | "grep";
+export type ToolName =
+  | "read_file"
+  | "list_directory"
+  | "grep"
+  | "write_file"
+  | "run_shell"
+  | "github_search_repos"
+  | "github_get_readme"
+  | "web_search"
+  | "fetch_url";
 
 export interface ToolCall {
   id: string;

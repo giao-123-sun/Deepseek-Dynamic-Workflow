@@ -4,6 +4,7 @@ dist/
 .cf-dw/
 .odw/
 .reasonix/
+awesome-dynamic-workflows/
 *.log
 *.jsonl
 *.csv
