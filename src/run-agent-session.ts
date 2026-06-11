@@ -1,6 +1,7 @@
 import path from "node:path";
 import { DeepSeekClient } from "./deepseek-client.js";
 import { loadDotEnv } from "./env.js";
+import { verifyClaimedArtifacts } from "./artifact-claims.js";
 import { readTextFile, sha256 } from "./fs-utils.js";
 import { buildMessages } from "./message-serializer.js";
 import { parseModelResponse } from "./model-response.js";
@@ -107,6 +108,20 @@ export async function runAgentSession(options: AgentCliOptions): Promise<AgentRu
     }
 
     if (parsed.type === "final") {
+      const artifactClaims = await verifyClaimedArtifacts(options.cwd, parsed.content);
+      if (artifactClaims.missing.length > 0) {
+        await store.append(session, {
+          kind: "repair_feedback",
+          turn,
+          content: [
+            "The final answer claims artifact files exist, but these paths are missing:",
+            artifactClaims.missing.map((artifact) => `- ${artifact}`).join("\n"),
+            "Call write_file with valid JSON, then verify the file with read_file or list_directory before sending final."
+          ].join("\n")
+        });
+        continue;
+      }
+
       await store.finalize(session, parsed.content);
       return {
         content: parsed.content,

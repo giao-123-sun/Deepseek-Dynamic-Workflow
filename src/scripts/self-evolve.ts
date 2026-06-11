@@ -38,6 +38,7 @@ interface CandidateSkill {
   };
   riskTags: string[];
   artifacts: string[];
+  missingArtifacts: string[];
   metrics: {
     turns: number;
     tools: number;
@@ -86,6 +87,7 @@ async function collectRuns(args: SelfEvolveArgs, runsRoot: string): Promise<Arra
   tokens: number;
   cacheHitRate: number | null;
   artifacts: string[];
+  missingArtifacts: string[];
   mtimeMs: number;
 }>> {
   const summaries = await summarizeRunsRoot(runsRoot);
@@ -106,8 +108,10 @@ async function collectRuns(args: SelfEvolveArgs, runsRoot: string): Promise<Arra
     const metadata = parseMetadata(task);
     if (args.workflowTag && metadata.workflow !== args.workflowTag) continue;
 
+    const finalResult = String(session.finalResult ?? "");
     const tools = session.appendOnlyLog?.filter((entry) => entry.kind === "tool_result").length ?? 0;
-    const artifacts = await collectArtifactPaths(summary.runDir);
+    const claimedArtifacts = await collectClaimedArtifacts(args.cwd, finalResult);
+    const artifacts = unique([...(await collectArtifactPaths(summary.runDir)), ...claimedArtifacts.existing]);
     results.push({
       runName: summary.runName,
       runDir: summary.runDir,
@@ -115,12 +119,13 @@ async function collectRuns(args: SelfEvolveArgs, runsRoot: string): Promise<Arra
       phase: metadata.phase ?? "unknown-phase",
       agent: metadata.agent ?? summary.runName,
       context: metadata.context ?? task.slice(0, 240),
-      finalResult: String(session.finalResult ?? ""),
+      finalResult,
       turns: summary.turns,
       tools,
       tokens: summary.totalTokens,
       cacheHitRate: summary.hitRate,
       artifacts,
+      missingArtifacts: claimedArtifacts.missing,
       mtimeMs: runStat.mtimeMs
     });
   }
@@ -179,6 +184,7 @@ function buildCandidate(run: Awaited<ReturnType<typeof collectRuns>>[number]): C
     },
     riskTags,
     artifacts: run.artifacts,
+    missingArtifacts: run.missingArtifacts,
     metrics: {
       turns: run.turns,
       tools: run.tools,
@@ -256,9 +262,12 @@ function activeSkillBlock(candidate: CandidateSkill): string {
     `- When: ${candidate.whenToUse}`,
     `- Skill: ${candidate.skill}`,
     `- Validation: ${candidate.validationHint}`,
+    candidate.riskTags.length ? `- Risk: ${candidate.riskTags.join(", ")}` : "",
+    candidate.missingArtifacts.length ? `- Missing claimed artifacts: ${candidate.missingArtifacts.join(", ")}` : "",
+    candidate.artifacts.length ? `- Verified artifacts: ${candidate.artifacts.slice(0, 3).join(", ")}` : "",
     `- Score: ${candidate.score.total}`,
     ""
-  ].join("\n");
+  ].filter(Boolean).join("\n");
 }
 
 function renderCandidate(candidate: CandidateSkill): string[] {
@@ -276,6 +285,7 @@ function renderCandidate(candidate: CandidateSkill): string[] {
     `- Score: ${candidate.score.total} (${Object.entries(candidate.score).map(([key, value]) => `${key}=${value}`).join(", ")})`,
     `- Risk tags: ${candidate.riskTags.length ? candidate.riskTags.join(", ") : "none"}`,
     `- Artifacts: ${candidate.artifacts.length ? candidate.artifacts.join(", ") : "none"}`,
+    `- Missing claimed artifacts: ${candidate.missingArtifacts.length ? candidate.missingArtifacts.join(", ") : "none"}`,
     "",
     "Evidence:",
     "",
@@ -297,8 +307,63 @@ async function collectArtifactPaths(runDir: string): Promise<string[]> {
   return entries.map((entry) => path.join(path.basename(runDir), "artifacts", entry).split(path.sep).join("/"));
 }
 
+async function collectClaimedArtifacts(cwd: string, text: string): Promise<{ existing: string[]; missing: string[] }> {
+  const candidates = unique(extractClaimedArtifactPaths(text));
+  const existing: string[] = [];
+  const missing: string[] = [];
+  const cwdAbs = path.resolve(cwd);
+
+  for (const candidate of candidates) {
+    const resolved = path.resolve(cwdAbs, candidate);
+    if (!isInside(resolved, cwdAbs)) continue;
+    if (await fileExists(resolved)) existing.push(candidate);
+    else missing.push(candidate);
+  }
+
+  return {
+    existing: unique(existing),
+    missing: unique(missing)
+  };
+}
+
+function extractClaimedArtifactPaths(text: string): string[] {
+  const matches: string[] = [];
+  const pattern = /(?:`|")?((?:\.cf-dw|awesome-dynamic-workflows\/research)[A-Za-z0-9._/\\-]+\.(?:md|json|html|txt|csv))(?:`|")?/g;
+  let match: RegExpExecArray | null;
+  while ((match = pattern.exec(text)) !== null) {
+    const cleaned = normalizeArtifactPath(match[1] ?? "");
+    if (cleaned) matches.push(cleaned);
+  }
+  return matches;
+}
+
+function normalizeArtifactPath(value: string): string {
+  return value
+    .replace(/\\/g, "/")
+    .replace(/[),.;:]+$/g, "")
+    .replace(/^\/+/, "")
+    .trim();
+}
+
+function isInside(candidate: string, root: string): boolean {
+  const relative = path.relative(root, candidate);
+  return Boolean(relative) && !relative.startsWith("..") && !path.isAbsolute(relative);
+}
+
 function inferSkill(run: Awaited<ReturnType<typeof collectRuns>>[number]): string {
   const lower = `${run.agent} ${run.context}`.toLowerCase();
+  if (run.missingArtifacts.length > 0 || lower.includes("write") || lower.includes("upgrader")) {
+    return "When producing file artifacts, prefer write_file with a lines array for Markdown, keep payloads protocol-safe, then verify with read_file or list_directory before final.";
+  }
+  if (lower.includes("style:canonical-awesome-lists") || (lower.includes("canonical") && lower.includes("awesome"))) {
+    return "Use canonical awesome-list structure: clear title/intro, 3-5 useful badges, anchored contents, domain categories, normalized item format, contribution rules, and periodic link/freshness checks.";
+  }
+  if (lower.includes("style:ai-agent-awesome-lists") || (lower.includes("ai/agent") && lower.includes("awesome"))) {
+    return "For fast-moving AI/agent awesome lists, add freshness signals, star or citation metadata, tags, split tools/papers/case studies, preserve raw-source provenance, and consider a machine-readable index for large lists.";
+  }
+  if (lower.includes("style:readme-upgrader") || (lower.includes("readme") && lower.includes("awesome"))) {
+    return "Before upgrading an awesome-list README, read current README, contributing rules, data files, and style notes; preserve the taxonomy while proposing exact section edits, item format, selection criteria, and freshness policy.";
+  }
   if (lower.includes("research") || lower.includes("source")) {
     return "Collect first-party sources before synthesis, write raw notes to a stable research artifact, and include URLs plus one-line inclusion rationale.";
   }
@@ -323,6 +388,9 @@ function inferSuggestedChange(run: Awaited<ReturnType<typeof collectRuns>>[numbe
 }
 
 function inferValidationHint(run: Awaited<ReturnType<typeof collectRuns>>[number]): string {
+  if (run.missingArtifacts.length > 0) {
+    return `Repair and verify missing claimed artifacts before reusing this pattern: ${run.missingArtifacts.slice(0, 3).join(", ")}.`;
+  }
   if (run.artifacts.length > 0) {
     return `Check that expected artifacts still exist and are cited: ${run.artifacts.slice(0, 3).join(", ")}.`;
   }
@@ -348,6 +416,7 @@ function inferRiskTags(run: Awaited<ReturnType<typeof collectRuns>>[number]): st
   const tags: string[] = [];
   if (/(api[_ -]?key|secret|password|token=|sk-)/.test(text)) tags.push("secret_risk");
   if (text.length > 12_000) tags.push("too_large");
+  if (run.missingArtifacts.length > 0) tags.push("claimed_artifact_missing");
   return tags;
 }
 
@@ -438,6 +507,10 @@ function compact(value: string, max: number): string {
 
 function clampScore(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
+}
+
+function unique(values: string[]): string[] {
+  return Array.from(new Set(values.filter(Boolean)));
 }
 
 function stableId(value: string): string {

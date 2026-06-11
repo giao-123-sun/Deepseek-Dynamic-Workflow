@@ -121,7 +121,9 @@ async function grepTool(cwd: string, call: ToolCall): Promise<StableToolResult> 
 
 async function writeFileTool(cwd: string, call: ToolCall): Promise<StableToolResult> {
   const inputPath = stringArg(call.args, "path");
-  const content = stringArg(call.args, "content");
+  const content = typeof call.args.content === "string"
+    ? call.args.content
+    : stringArrayArg(call.args, "lines").join("\n");
   const relative = toWorkspaceRelative(cwd, inputPath);
   const absolute = path.resolve(cwd, relative);
   await ensureDir(path.dirname(absolute));
@@ -272,6 +274,14 @@ function numberArg(
   const parsed = typeof value === "number" ? value : Number.parseInt(String(value ?? ""), 10);
   if (!Number.isFinite(parsed)) return fallback;
   return Math.max(min, Math.min(max, Math.trunc(parsed)));
+}
+
+function stringArrayArg(args: Record<string, unknown>, key: string): string[] {
+  const value = args[key];
+  if (!Array.isArray(value) || value.some((item) => typeof item !== "string")) {
+    throw new Error(`Tool arg ${key} must be an array of strings.`);
+  }
+  return value;
 }
 
 function isToolName(value: string): value is ToolName {

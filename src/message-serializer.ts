@@ -60,6 +60,7 @@ function toolContract(options: MessageBuildOptions): string {
 
   if (options.allowWrite) {
     tools.push("- write_file args: {\"path\":\"awesome-dynamic-workflows/README.md\",\"content\":\"...\"}");
+    tools.push("- write_file args for Markdown artifacts: {\"path\":\".cf-dw/evals/example.md\",\"lines\":[\"# Title\",\"\",\"- concise line\"]}");
   }
   if (options.allowShell) {
     tools.push("- run_shell args: {\"command\":\"gh search repos \\\"dynamic workflows\\\" --limit 10\",\"timeoutMs\":30000}");
@@ -75,6 +76,7 @@ function toolContract(options: MessageBuildOptions): string {
     "Available tools:",
     ...tools,
     "For research tasks, collect sources with tools first, cite URLs in the final answer, and write requested artifacts before finalizing when write_file is available.",
+    "For long Markdown artifacts, prefer write_file with a lines array so JSON stays valid. After writing, verify the artifact with read_file or list_directory before final.",
     "</tool_contract>"
   ].join("\n");
 }
