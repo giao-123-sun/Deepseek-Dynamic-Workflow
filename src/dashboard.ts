@@ -51,6 +51,8 @@ interface PhaseStats {
   weightedCacheHitRate: number | null;
 }
 
+type WorkflowArtifactViewLike = NonNullable<WorkflowAgentView["artifacts"]>[number];
+
 async function main(): Promise<void> {
   try {
     const args = parseArgs(process.argv.slice(2));
@@ -655,6 +657,413 @@ function renderDashboard(workflow: WorkflowView): string {
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 10px;
     }
+    .mission-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 260px;
+      gap: 14px;
+      align-items: start;
+      margin-bottom: 14px;
+    }
+    .mission-card,
+    .mission-side,
+    .workflow-map-card,
+    .inspector-card,
+    .learning-card {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+    .mission-card {
+      padding: 18px;
+      overflow: hidden;
+    }
+    .mission-top {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .mission-title {
+      margin: 0;
+      font-size: 26px;
+      line-height: 1.08;
+      font-weight: 760;
+      overflow-wrap: anywhere;
+    }
+    .mission-copy {
+      margin: 8px 0 0;
+      max-width: 780px;
+      color: #4c5968;
+      font-size: 14px;
+      overflow-wrap: anywhere;
+    }
+    .mission-progress {
+      min-width: 118px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+    .mission-progress strong {
+      display: block;
+      font-size: 32px;
+      line-height: 1;
+    }
+    .mission-progress span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .mission-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .mission-stat {
+      min-width: 0;
+      border: 1px solid #e5ebf1;
+      border-radius: 8px;
+      background: #fbfdff;
+      padding: 9px;
+    }
+    .mission-stat-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 680;
+      text-transform: uppercase;
+    }
+    .mission-stat-value {
+      margin-top: 6px;
+      font-size: 18px;
+      font-weight: 760;
+      font-variant-numeric: tabular-nums;
+    }
+    .mission-stat-note {
+      margin-top: 2px;
+      color: var(--subtle);
+      font-size: 11px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .mission-side {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .runtime-compact {
+      font-size: 30px;
+      font-weight: 760;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+    .command-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.85fr) minmax(300px, 0.9fr);
+      gap: 14px;
+      align-items: start;
+    }
+    .workflow-map-card,
+    .inspector-card,
+    .learning-card {
+      min-width: 0;
+      padding: 14px;
+    }
+    .map-header,
+    .inspector-header,
+    .learning-header {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .map-title,
+    .inspector-title,
+    .learning-title {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 760;
+    }
+    .workflow-map {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(210px, 1fr);
+      gap: 12px;
+      overflow-x: auto;
+      padding: 2px 2px 10px;
+      scroll-snap-type: x proximity;
+    }
+    .phase-column {
+      position: relative;
+      min-width: 210px;
+      border: 1px solid #e2e9f0;
+      border-radius: 8px;
+      background: linear-gradient(180deg, #ffffff, #f8fbfd);
+      padding: 11px;
+      scroll-snap-align: start;
+    }
+    .phase-column::after {
+      content: "";
+      position: absolute;
+      top: 36px;
+      right: -13px;
+      width: 13px;
+      height: 2px;
+      background: #cfdae6;
+    }
+    .phase-column:last-child::after {
+      display: none;
+    }
+    .phase-column-head {
+      display: grid;
+      gap: 8px;
+    }
+    .phase-column-title {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+      font-weight: 730;
+      color: #233044;
+    }
+    .phase-column-title span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .phase-column-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 11px;
+      font-variant-numeric: tabular-nums;
+    }
+    .capsule-stack {
+      display: grid;
+      gap: 8px;
+      margin-top: 11px;
+    }
+    .agent-capsule {
+      position: relative;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 8px;
+      min-height: 38px;
+      border: 1px solid #dfe7ef;
+      border-radius: 999px;
+      background: #fff;
+      padding: 6px 8px;
+      color: inherit;
+      cursor: default;
+      outline: none;
+      box-shadow: 0 5px 14px rgba(31, 42, 55, 0.05);
+    }
+    .agent-capsule.completed { border-color: #cbeede; background: #f6fffb; }
+    .agent-capsule.running { border-color: #bdd2fb; background: #f4f8ff; }
+    .agent-capsule.failed { border-color: #f2b8b8; background: #fff6f6; }
+    .agent-capsule.pending { border-color: #e0e5eb; background: #fbfcfd; }
+    .capsule-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--pending);
+      box-shadow: 0 0 0 4px rgba(168, 177, 189, 0.12);
+    }
+    .agent-capsule.completed .capsule-dot { background: var(--completed); box-shadow: 0 0 0 4px rgba(31, 157, 114, 0.13); }
+    .agent-capsule.running .capsule-dot { background: var(--running); box-shadow: 0 0 0 4px rgba(45, 108, 223, 0.13); }
+    .agent-capsule.failed .capsule-dot { background: var(--failed); box-shadow: 0 0 0 4px rgba(211, 72, 72, 0.13); }
+    .capsule-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 12px;
+      font-weight: 700;
+      color: #273449;
+    }
+    .capsule-meter {
+      width: 36px;
+      height: 6px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e5ebf1;
+    }
+    .capsule-meter span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--cache);
+    }
+    .capsule-preview {
+      position: absolute;
+      z-index: 20;
+      left: 12px;
+      top: calc(100% + 8px);
+      width: min(340px, calc(100vw - 56px));
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: opacity 150ms ease, transform 150ms ease;
+    }
+    .agent-capsule:hover .capsule-preview,
+    .agent-capsule:focus-within .capsule-preview {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .preview-card {
+      border: 1px solid #d9e3ed;
+      border-radius: 8px;
+      background: #ffffff;
+      box-shadow: 0 20px 45px rgba(21, 32, 45, 0.18);
+      padding: 10px;
+    }
+    .preview-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+      color: #273449;
+      font-size: 12px;
+      font-weight: 740;
+    }
+    .preview-media {
+      display: block;
+      width: 100%;
+      max-height: 180px;
+      object-fit: cover;
+      border: 1px solid #e5ebf1;
+      border-radius: 8px;
+      background: #edf2f7;
+    }
+    .activity-preview {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 7px;
+    }
+    .activity-step {
+      min-height: 72px;
+      border: 1px solid #e4ebf2;
+      border-radius: 8px;
+      background: #f8fbfd;
+      padding: 8px;
+    }
+    .activity-step strong {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: #2b394b;
+      font-size: 11px;
+      margin-bottom: 5px;
+    }
+    .activity-step span {
+      display: -webkit-box;
+      color: var(--muted);
+      font-size: 11px;
+      overflow: hidden;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
+    .inspector-body {
+      display: grid;
+      gap: 11px;
+    }
+    .focus-agent {
+      border: 1px solid #dfe7ef;
+      border-radius: 8px;
+      background: #fbfdff;
+      padding: 11px;
+    }
+    .focus-agent-name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 760;
+      color: #243246;
+    }
+    .focus-context {
+      margin-top: 7px;
+      color: #566375;
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+    .inspector-bars {
+      display: grid;
+      gap: 8px;
+    }
+    .inspector-row {
+      display: grid;
+      grid-template-columns: 92px minmax(0, 1fr) 58px;
+      gap: 8px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+    }
+    .artifact-strip {
+      display: grid;
+      gap: 8px;
+    }
+    .artifact-strip-item {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 8px;
+      align-items: start;
+      border: 1px solid #e4ebf2;
+      border-radius: 8px;
+      background: #fff;
+      padding: 8px;
+    }
+    .artifact-strip-item strong {
+      display: block;
+      color: #2c3b4d;
+      font-size: 12px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .artifact-strip-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      overflow-wrap: anywhere;
+    }
+    .artifact-strip-media {
+      width: 56px;
+      height: 42px;
+      object-fit: cover;
+      border: 1px solid #e5ebf1;
+      border-radius: 6px;
+      background: #edf2f7;
+    }
+    .story-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+      gap: 14px;
+    }
+    .learning-list {
+      display: grid;
+      gap: 9px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .learning-list li {
+      border: 1px solid #e4ebf2;
+      border-radius: 8px;
+      background: #fbfdff;
+      padding: 9px;
+      color: #4e5d6f;
+      font-size: 12px;
+    }
     .output-card {
       min-width: 0;
       padding: 12px;
@@ -684,7 +1093,9 @@ function renderDashboard(workflow: WorkflowView): string {
     }
     @media (max-width: 980px) {
       .hero,
-      .overview {
+      .overview,
+      .command-grid,
+      .story-grid {
         grid-template-columns: 1fr;
       }
       .progress-card {
@@ -692,6 +1103,14 @@ function renderDashboard(workflow: WorkflowView): string {
       }
       .time-card {
         min-height: 128px;
+      }
+      .mission-progress {
+        text-align: left;
+      }
+    }
+    @media (max-width: 760px) {
+      .mission-shell {
+        grid-template-columns: 1fr;
       }
     }
     @media (max-width: 640px) {
@@ -704,81 +1123,70 @@ function renderDashboard(workflow: WorkflowView): string {
       .phase-actions { justify-content: space-between; }
       .agent-grid { grid-template-columns: 1fr; padding: 0 12px 12px; }
       .agent-bars { grid-template-columns: 1fr; }
+      .mission-top { display: grid; }
+      .mission-title { font-size: 23px; }
+      .workflow-map { grid-auto-columns: minmax(190px, 86vw); }
+      .activity-preview { grid-template-columns: 1fr; }
+      .inspector-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
   <main>
-    <section class="hero">
-      <div class="hero-main">
-        <div class="eyebrow">${icon("workflow")} Dynamic workflow monitor</div>
-        <h1>${escapeHtml(workflow.title)}</h1>
-        <p class="description">${escapeHtml(workflow.description)}</p>
-        <div class="status-row">
-          ${renderStatusChip(status, labelStatus(String(workflow.status)))}
-          <span class="chip">${icon("users")} ${stats.completed}/${stats.agents} agents done</span>
-          <span class="chip">${icon("layers")} ${stats.completedPhases}/${stats.phases} phases done</span>
-          <span class="chip">${icon("archive")} ${stats.artifacts} outputs</span>
-        </div>
-      </div>
-      <aside class="time-card">
-        <div>
-          <div class="time-label">${icon("clock")} Runtime</div>
-          <div class="runtime" id="runtime" data-start="${escapeAttr(workflow.startedAt ?? "")}" data-end="${escapeAttr(workflow.endedAt ?? "")}" data-duration="${stats.durationMs}">${formatDuration(stats.durationMs)}</div>
-        </div>
-        <div class="updated">Generated ${escapeHtml(formatDateTime(generatedAt))}</div>
-      </aside>
-    </section>
-
-    <section class="overview" aria-label="Workflow summary">
-      <div class="progress-card">
-        <div class="progress-head">
+    <section class="mission-shell" aria-label="Workflow mission">
+      <div class="mission-card">
+        <div class="eyebrow">${icon("sparkles")} DeepSeek Dynamic Workflow</div>
+        <div class="mission-top">
           <div>
-            <h2 class="progress-title">Overall progress</h2>
-            <div class="section-kicker">Readable at a glance: how much work is finished.</div>
+            <h1 class="mission-title">${escapeHtml(workflow.title)}</h1>
+            <p class="mission-copy">${escapeHtml(workflow.description)}</p>
           </div>
-          <div class="progress-value">${formatPercent(progress)}</div>
+          <div class="mission-progress">
+            <strong>${formatPercent(progress)}</strong>
+            <span>overall progress</span>
+          </div>
         </div>
         ${renderProgressBar(progress, "progress-track")}
         ${renderStatusSegments(stats)}
-        <div class="legend">
-          ${renderLegend("completed", stats.completed, "Completed")}
-          ${renderLegend("running", stats.running, "Running")}
-          ${renderLegend("failed", stats.failed, "Needs attention")}
-          ${renderLegend("pending", stats.pending, "Waiting")}
+        <div class="mission-stats">
+          ${renderMissionStat("users", "Agents", `${stats.completed}/${stats.agents}`, "active workforce")}
+          ${renderMissionStat("layers", "Phases", `${stats.completedPhases}/${stats.phases}`, "workflow map")}
+          ${renderMissionStat("gauge", "Cache", formatRate(stats.weightedCacheHitRate), `${formatTokens(stats.effectiveTokens)} effective`)}
+          ${renderMissionStat("coins", "Tokens", formatTokens(stats.tokens), `${stats.tools} tools`)}
+          ${renderMissionStat("archive", "Artifacts", `${stats.artifacts}`, "files produced")}
         </div>
       </div>
-      ${renderMetricCard("users", "Agents", `${stats.agents}`, `${stats.completed} completed`)}
-      ${renderMetricCard("gauge", "Cache hit", formatRate(stats.weightedCacheHitRate), `${formatTokens(stats.effectiveTokens)} effective`)}
-      ${renderMetricCard("coins", "Tokens", formatTokens(stats.tokens), `${stats.tools} tool calls`)}
-      ${renderMetricCard("layers", "Phases", `${stats.phases}`, `${stats.completedPhases} completed`)}
-      ${renderMetricCard("wrench", "Tools", `${stats.tools}`, "actions taken")}
-      ${renderMetricCard("archive", "Outputs", `${stats.artifacts}`, "files produced")}
+      <aside class="mission-side">
+        <div>
+          <div class="time-label">${icon("clock")} Runtime</div>
+          <div class="runtime-compact" id="runtime" data-start="${escapeAttr(workflow.startedAt ?? "")}" data-end="${escapeAttr(workflow.endedAt ?? "")}" data-duration="${stats.durationMs}">${formatDuration(stats.durationMs)}</div>
+        </div>
+        <div class="status-row">
+          ${renderStatusChip(status, labelStatus(String(workflow.status)))}
+          <span class="chip">${icon("calendar")} ${escapeHtml(formatDateTime(generatedAt))}</span>
+        </div>
+      </aside>
+    </section>
+
+    <section class="command-grid" aria-label="Workflow command center">
+      ${renderWorkflowMap(workflow)}
+      ${renderInspector(workflow)}
+    </section>
+
+    <section class="section story-grid">
+      ${renderOutputs(workflow)}
+      ${renderLearningPanel(workflow)}
     </section>
 
     <section class="section">
       <div class="section-heading">
         <div>
-          <h2 class="section-title">Workstream</h2>
-          <p class="section-kicker">Each block is one phase; the small bar shows how far it has moved.</p>
-        </div>
-      </div>
-      <div class="phase-rail">
-        ${workflow.phases.map(renderPhaseRail).join("\n")}
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-heading">
-        <div>
-          <h2 class="section-title">Phases and agents</h2>
-          <p class="section-kicker">Open a phase to see what every agent worked on, what it used, and what it produced.</p>
+          <h2 class="section-title">Deep trace</h2>
+          <p class="section-kicker">Open a phase when you want the detailed token, tool, cache, and output records.</p>
         </div>
       </div>
       ${workflow.phases.map((phase, index) => renderPhase(phase, index === 0 || phase.status === "running")).join("\n")}
     </section>
-
-    ${renderOutputs(workflow)}
   </main>
   <script>
     const runtime = document.getElementById('runtime');
@@ -820,6 +1228,14 @@ function renderMetricCard(iconName: string, label: string, value: string, note: 
 </article>`;
 }
 
+function renderMissionStat(iconName: string, label: string, value: string, note: string): string {
+  return `<div class="mission-stat">
+  <div class="mission-stat-label">${icon(iconName)} ${escapeHtml(label)}</div>
+  <div class="mission-stat-value">${escapeHtml(value)}</div>
+  <div class="mission-stat-note">${escapeHtml(note)}</div>
+</div>`;
+}
+
 function renderProgressBar(value: number, className: string): string {
   return `<div class="${className}"><span style="width:${formatStylePercent(value)}"></span></div>`;
 }
@@ -841,6 +1257,185 @@ function renderStatusSegments(stats: WorkflowStats): string {
 
 function renderLegend(status: string, count: number, label: string): string {
   return `<span class="legend-item"><span class="legend-dot status-segment ${escapeAttr(status)}"></span>${escapeHtml(label)} ${count}</span>`;
+}
+
+function renderWorkflowMap(workflow: WorkflowView): string {
+  return `<section class="workflow-map-card">
+  <div class="map-header">
+    <div>
+      <h2 class="map-title">Workflow map</h2>
+      <p class="section-kicker">Phases move left to right. Hover an agent capsule to preview its work.</p>
+    </div>
+    <span class="chip">${icon("workflow")} ${workflow.phases.length} phases</span>
+  </div>
+  <div class="workflow-map">
+    ${workflow.phases.map(renderPhaseColumn).join("\n")}
+  </div>
+</section>`;
+}
+
+function renderPhaseColumn(phase: WorkflowPhaseView): string {
+  const stats = phaseStats(phase);
+  const maxTokens = Math.max(1, ...phase.agents.map((agent) => agent.tokens));
+  return `<article class="phase-column ${escapeAttr(normalizeStatus(phase.status))}">
+  <div class="phase-column-head">
+    <div class="phase-column-title">${statusIcon(phase.status)} <span title="${escapeAttr(phase.name)}">${escapeHtml(phase.name)}</span></div>
+    ${renderProgressBar(stats.progress, "mini-track")}
+    <div class="phase-column-meta">
+      <span>${stats.completed}/${stats.agents} agents</span>
+      <span>${formatTokens(stats.tokens)} tokens</span>
+    </div>
+  </div>
+  <div class="capsule-stack">
+    ${phase.agents.map((agent) => renderAgentCapsule(agent, maxTokens)).join("\n")}
+  </div>
+</article>`;
+}
+
+function renderAgentCapsule(agent: WorkflowAgentView, maxTokens: number): string {
+  const status = normalizeStatus(agent.status);
+  const cacheWidth = formatStylePercent(agent.cacheHitRate ?? ratio(agent.tokens, maxTokens));
+  return `<div class="agent-capsule ${escapeAttr(status)}" tabindex="0" aria-label="${escapeAttr(agent.name)}">
+  <span class="capsule-dot" aria-hidden="true"></span>
+  <span class="capsule-name" title="${escapeAttr(agent.name)}">${escapeHtml(agent.shortName || agent.name)}</span>
+  <span class="capsule-meter" title="Cache reuse ${escapeAttr(formatRate(agent.cacheHitRate))}"><span style="width:${cacheWidth}"></span></span>
+  <div class="capsule-preview">
+    ${renderAgentPopover(agent)}
+  </div>
+</div>`;
+}
+
+function renderAgentPopover(agent: WorkflowAgentView): string {
+  const visual = findVisualArtifact(agent);
+  return `<div class="preview-card">
+  <div class="preview-title">
+    <span>${statusIcon(agent.status)} ${escapeHtml(agent.name)}</span>
+    <span>${agent.tools} tools</span>
+  </div>
+  ${visual ? renderMediaPreview(visual) : renderActivityPreview(agent)}
+  <div class="agent-metrics">
+    <span class="pill">${icon("coins")} ${agent.tokens > 0 ? formatTokens(agent.tokens) : "n/a"}</span>
+    <span class="pill">${icon("gauge")} ${formatRate(agent.cacheHitRate)} cache</span>
+    <span class="pill">${icon("clock")} ${agent.durationMs > 0 ? formatDuration(agent.durationMs) : "n/a"}</span>
+  </div>
+</div>`;
+}
+
+function renderActivityPreview(agent: WorkflowAgentView): string {
+  const artifacts = agent.artifacts ?? [];
+  const output = artifacts.length > 0 ? artifacts.map((artifact) => artifact.id).slice(0, 2).join(", ") : "No artifact yet";
+  return `<div class="activity-preview">
+  <div class="activity-step">
+    <strong>${icon("target")} Intent</strong>
+    <span>${escapeHtml(agent.context || "No context captured.")}</span>
+  </div>
+  <div class="activity-step">
+    <strong>${icon("wrench")} Actions</strong>
+    <span>${agent.tools} tool calls, ${agent.backend ? `${escapeHtml(agent.backend)} backend` : "backend unknown"}</span>
+  </div>
+  <div class="activity-step">
+    <strong>${icon("archive")} Output</strong>
+    <span>${escapeHtml(output)}</span>
+  </div>
+</div>`;
+}
+
+function renderMediaPreview(artifact: WorkflowArtifactViewLike): string {
+  if (artifact.mediaSrc && artifact.mediaKind === "video") {
+    return `<video class="preview-media" src="${escapeAttr(artifact.mediaSrc)}" autoplay muted loop playsinline></video>`;
+  }
+  if (artifact.mediaSrc) {
+    return `<img class="preview-media" src="${escapeAttr(artifact.mediaSrc)}" alt="${escapeAttr(artifact.id)}">`;
+  }
+  return `<div class="activity-step"><strong>${icon("monitor")} Browser preview</strong><span>${escapeHtml(artifact.previewError ?? "Recording artifact is linked but not embedded.")}</span></div>`;
+}
+
+function renderInspector(workflow: WorkflowView): string {
+  const agents = allAgents(workflow);
+  const focus = agents.find((agent) => agent.status === "running")
+    ?? agents.find((agent) => (agent.artifacts?.length ?? 0) > 0)
+    ?? agents[0];
+  if (!focus) {
+    return `<aside class="inspector-card"><h2 class="inspector-title">Live inspector</h2><p class="section-kicker">No agents are available yet.</p></aside>`;
+  }
+
+  const maxTokens = Math.max(1, ...agents.map((agent) => agent.tokens));
+  const artifacts = (focus.artifacts ?? []).slice(0, 4);
+  return `<aside class="inspector-card">
+  <div class="inspector-header">
+    <div>
+      <h2 class="inspector-title">Live inspector</h2>
+      <p class="section-kicker">Focused on the most active or artifact-rich agent.</p>
+    </div>
+    ${renderStatusChip(normalizeStatus(focus.status), labelStatus(focus.status))}
+  </div>
+  <div class="inspector-body">
+    <div class="focus-agent">
+      <div class="focus-agent-name">${statusIcon(focus.status)} ${escapeHtml(focus.name)}</div>
+      <div class="focus-context">${escapeHtml(focus.context || "No context captured.")}</div>
+    </div>
+    <div class="inspector-bars">
+      ${renderInspectorBar("Token load", ratio(focus.tokens, maxTokens), formatTokens(focus.tokens))}
+      ${renderInspectorBar("Cache reuse", focus.cacheHitRate ?? 0, formatRate(focus.cacheHitRate))}
+      ${renderInspectorBar("Tool effort", ratio(focus.tools, Math.max(1, ...agents.map((agent) => agent.tools))), `${focus.tools}`)}
+    </div>
+    <div class="agent-metrics">
+      ${focus.backend ? `<span class="pill">${icon("cpu")} ${escapeHtml(focus.backend)}</span>` : ""}
+      <span class="pill">${icon("clock")} ${focus.durationMs > 0 ? formatDuration(focus.durationMs) : "n/a"}</span>
+      <span class="pill">${icon("archive")} ${focus.artifacts?.length ?? 0} outputs</span>
+    </div>
+    ${artifacts.length > 0 ? `<div class="artifact-strip">${artifacts.map(renderArtifactStripItem).join("\n")}</div>` : `<div class="artifact-preview-note">Artifacts will appear here as agents write files or browser recordings.</div>`}
+  </div>
+</aside>`;
+}
+
+function renderInspectorBar(label: string, value: number, text: string): string {
+  return `<div class="inspector-row">
+  <span>${escapeHtml(label)}</span>
+  ${renderProgressBar(value, "thin-track")}
+  <strong>${escapeHtml(text)}</strong>
+</div>`;
+}
+
+function renderArtifactStripItem(artifact: WorkflowArtifactViewLike): string {
+  const visual = artifact.mediaSrc
+    ? artifact.mediaKind === "video"
+      ? `<video class="artifact-strip-media" src="${escapeAttr(artifact.mediaSrc)}" autoplay muted loop playsinline></video>`
+      : `<img class="artifact-strip-media" src="${escapeAttr(artifact.mediaSrc)}" alt="${escapeAttr(artifact.id)}">`
+    : `<span class="metric-icon">${icon(artifact.mediaKind ? "monitor" : "file")}</span>`;
+  return `<div class="artifact-strip-item">
+  ${visual}
+  <div>
+    <strong title="${escapeAttr(artifact.id)}">${escapeHtml(artifact.id)}</strong>
+    <span>${escapeHtml(artifact.type)}${artifact.bytes ? ` - ${escapeHtml(formatBytes(artifact.bytes))}` : ""}</span>
+    <span>${escapeHtml(artifact.path)}</span>
+  </div>
+</div>`;
+}
+
+function renderLearningPanel(workflow: WorkflowView): string {
+  const agents = allAgents(workflow);
+  const topCache = agents
+    .filter((agent) => agent.cacheHitRate !== null)
+    .sort((a, b) => (b.cacheHitRate ?? 0) - (a.cacheHitRate ?? 0))[0];
+  const mostTools = [...agents].sort((a, b) => b.tools - a.tools)[0];
+  const artifactAgent = agents.find((agent) => (agent.artifacts?.length ?? 0) > 0);
+  return `<aside class="learning-card">
+  <div class="learning-header">
+    <div>
+      <h2 class="learning-title">Self-evolve notes</h2>
+      <p class="section-kicker">What this run teaches the next workflow.</p>
+    </div>
+    <span class="chip">${icon("sparkles")} skill memory</span>
+  </div>
+  <ul class="learning-list">
+    <li><strong>For planner agents:</strong> start with the phase map and hand off compact artifacts, not long transcripts.</li>
+    <li><strong>For browser agents:</strong> write a compressed GIF/WEBM artifact named like <code>browser-preview.gif</code>; capsules will show it on hover.</li>
+    <li><strong>For cache strategy:</strong> ${topCache ? `${escapeHtml(topCache.shortName)} reached ${formatRate(topCache.cacheHitRate)} cache reuse.` : "cache data is not available yet."}</li>
+    <li><strong>For tool-heavy agents:</strong> ${mostTools ? `${escapeHtml(mostTools.shortName)} used ${mostTools.tools} tools; promote repeated steps into a reusable skill.` : "no tool calls captured yet."}</li>
+    <li><strong>For artifact protocol:</strong> ${artifactAgent ? `${escapeHtml(artifactAgent.shortName)} produced ${artifactAgent.artifacts?.length ?? 0} artifacts for downstream review.` : "no artifacts captured yet."}</li>
+  </ul>
+</aside>`;
 }
 
 function renderPhaseRail(phase: WorkflowPhaseView): string {
@@ -934,7 +1529,9 @@ function renderArtifactPreview(artifact: NonNullable<WorkflowAgentView["artifact
     artifact.bytes ? formatBytes(artifact.bytes) : "",
     artifact.sha256 ? `sha ${artifact.sha256.slice(0, 10)}` : ""
   ].filter(Boolean).join(" | ");
-  const content = artifact.preview
+  const content = artifact.mediaKind
+    ? renderMediaPreview(artifact)
+    : artifact.preview
     ? `<pre>${escapeHtml(artifact.preview)}${artifact.previewTruncated ? "\n...[truncated]" : ""}</pre>`
     : `<div class="artifact-preview-note">${escapeHtml(artifact.previewError ?? "No inline preview for this artifact type.")}</div>`;
   return `<section class="artifact-preview">
@@ -953,7 +1550,7 @@ function renderOutputs(workflow: WorkflowView): string {
     .slice(0, 12);
   if (outputs.length === 0) return "";
 
-  return `<section class="section">
+  return `<section class="workflow-map-card">
   <div class="section-heading">
     <div>
       <h2 class="section-title">Outputs produced</h2>
@@ -980,7 +1577,7 @@ function renderOutputCard(
   </div>
   <div class="output-path">${escapeHtml(artifact.path)}</div>
   <div class="output-path">from ${escapeHtml(agent.shortName || agent.name)}</div>
-  <div class="output-preview">${escapeHtml(preview)}</div>
+  ${artifact.mediaKind ? renderMediaPreview(artifact) : `<div class="output-preview">${escapeHtml(preview)}</div>`}
 </article>`;
 }
 
@@ -1041,6 +1638,10 @@ function allAgents(workflow: WorkflowView): WorkflowAgentView[] {
   return workflow.phases.flatMap((phase) => phase.agents);
 }
 
+function findVisualArtifact(agent: WorkflowAgentView): WorkflowArtifactViewLike | undefined {
+  return (agent.artifacts ?? []).find((artifact) => artifact.mediaKind && (artifact.mediaSrc || artifact.previewError));
+}
+
 function weightedCache(agents: WorkflowAgentView[]): number | null {
   const cacheWeighted = agents.reduce(
     (acc, agent) => {
@@ -1092,6 +1693,10 @@ function icon(name: string, className = ""): string {
     cpu: '<rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="9" y="9" width="6" height="6"></rect><path d="M9 1v3"></path><path d="M15 1v3"></path><path d="M9 20v3"></path><path d="M15 20v3"></path><path d="M20 9h3"></path><path d="M20 15h3"></path><path d="M1 9h3"></path><path d="M1 15h3"></path>',
     folder: '<path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7l-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2Z"></path>',
     file: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"></path><path d="M14 2v6h6"></path><path d="M8 13h8"></path><path d="M8 17h5"></path>',
+    sparkles: '<path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6L12 3Z"></path><path d="M19 14l.9 2.1L22 17l-2.1.9L19 20l-.9-2.1L16 17l2.1-.9L19 14Z"></path><path d="M5 14l.8 1.8L8 17l-2.2.8L5 20l-.8-2.2L2 17l2.2-1.2L5 14Z"></path>',
+    calendar: '<rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4"></path><path d="M8 2v4"></path><path d="M3 10h18"></path>',
+    target: '<circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="5"></circle><circle cx="12" cy="12" r="1"></circle>',
+    monitor: '<rect x="3" y="4" width="18" height="13" rx="2"></rect><path d="M8 21h8"></path><path d="M12 17v4"></path>',
     check: '<path d="M20 6 9 17l-5-5"></path>',
     play: '<path d="m8 5 11 7-11 7Z"></path>',
     alert: '<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path>',

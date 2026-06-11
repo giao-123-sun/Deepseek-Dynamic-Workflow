@@ -1,4 +1,4 @@
-import { stat } from "node:fs/promises";
+import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { fileExists, readTextFile } from "./fs-utils.js";
 import { summarizeRunsRoot } from "./report-data.js";
@@ -28,6 +28,8 @@ export interface WorkflowArtifactView {
   path: string;
   bytes?: number;
   sha256?: string;
+  mediaKind?: "image" | "video";
+  mediaSrc?: string;
   preview?: string;
   previewTruncated?: boolean;
   previewError?: string;
@@ -236,6 +238,8 @@ function inferArtifactType(artifactPath: string): string {
   if (extension === ".html") return "html";
   if (extension === ".txt") return "text";
   if (extension === ".csv") return "csv";
+  if ([".gif", ".png", ".jpg", ".jpeg", ".webp"].includes(extension)) return "image";
+  if ([".mp4", ".webm", ".mov"].includes(extension)) return "video";
   return "file";
 }
 
@@ -298,6 +302,36 @@ async function addArtifactPreview(
 
   const fileStat = await stat(resolved);
   const bytes = artifact.bytes ?? fileStat.size;
+  const mediaKind = inferMediaKind(artifact);
+  if (mediaKind) {
+    const maxMediaBytes = 1_800_000;
+    if (fileStat.size > maxMediaBytes) {
+      return {
+        ...artifact,
+        bytes,
+        mediaKind,
+        previewError: `Media preview skipped: file is larger than ${maxMediaBytes} bytes.`
+      };
+    }
+
+    try {
+      const raw = await readFile(resolved);
+      return {
+        ...artifact,
+        bytes,
+        mediaKind,
+        mediaSrc: `data:${mediaMimeType(artifact.path, mediaKind)};base64,${raw.toString("base64")}`
+      };
+    } catch (error) {
+      return {
+        ...artifact,
+        bytes,
+        mediaKind,
+        previewError: `Media preview skipped: ${error instanceof Error ? error.message : String(error)}`
+      };
+    }
+  }
+
   const maxPreviewBytes = 80_000;
   if (fileStat.size > maxPreviewBytes) {
     return {
@@ -338,6 +372,30 @@ function isPreviewableArtifact(artifact: WorkflowArtifactView): boolean {
   const ext = path.extname(artifact.path).toLowerCase();
   return ["text", "markdown", "json", "jsonl", "csv", "log"].includes(type)
     || [".txt", ".md", ".json", ".jsonl", ".csv", ".log"].includes(ext);
+}
+
+function inferMediaKind(artifact: WorkflowArtifactView): "image" | "video" | undefined {
+  const type = artifact.type.toLowerCase();
+  const ext = path.extname(artifact.path).toLowerCase();
+  if (type === "image" || ["gif", "png", "jpg", "jpeg", "webp"].includes(type) || [".gif", ".png", ".jpg", ".jpeg", ".webp"].includes(ext)) {
+    return "image";
+  }
+  if (type === "video" || ["mp4", "webm", "mov"].includes(type) || [".mp4", ".webm", ".mov"].includes(ext)) {
+    return "video";
+  }
+  return undefined;
+}
+
+function mediaMimeType(filePath: string, mediaKind: "image" | "video"): string {
+  const ext = path.extname(filePath).toLowerCase();
+  if (ext === ".gif") return "image/gif";
+  if (ext === ".png") return "image/png";
+  if (ext === ".jpg" || ext === ".jpeg") return "image/jpeg";
+  if (ext === ".webp") return "image/webp";
+  if (ext === ".mp4") return "video/mp4";
+  if (ext === ".webm") return "video/webm";
+  if (ext === ".mov") return "video/quicktime";
+  return mediaKind === "image" ? "image/png" : "video/mp4";
 }
 
 function normalizeArtifactPreview(raw: string, type: string, filePath: string): string {
