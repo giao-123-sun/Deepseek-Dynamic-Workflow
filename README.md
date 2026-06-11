@@ -2,6 +2,10 @@
   <img src="assets/deepseek-dynamic-workflow-avatar.png" alt="DeepSeek Dynamic Workflow mascot avatar" width="180" />
 </p>
 
+<p align="center">
+  <strong>English</strong> · <a href="./README.ru.md">Русский</a>
+</p>
+
 # DeepSeek Dynamic Workflow
 
 <p align="center">

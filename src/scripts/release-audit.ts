@@ -168,6 +168,7 @@ async function auditProjectFiles(cwd: string): Promise<Gate[]> {
   const gates: Gate[] = [];
   const requiredFiles = [
     "README.md",
+    "README.ru.md",
     "LICENSE.md",
     "NOTICE.md",
     ".github/workflows/ci.yml",
@@ -204,8 +205,11 @@ async function auditProjectFiles(cwd: string): Promise<Gate[]> {
   const readme = await readTextFile(path.join(cwd, "README.md"));
   gates.push({
     name: "readme-positioning",
-    passed: readme.includes("# DeepSeek Dynamic Workflow") && readme.includes("## Install With An Agent"),
-    detail: "README uses the DDW project name and includes an agent-install prompt."
+    passed:
+      readme.includes("# DeepSeek Dynamic Workflow") &&
+      readme.includes("## Install With An Agent") &&
+      readme.includes("./README.ru.md"),
+    detail: "README uses the DDW project name and includes language links plus an agent-install prompt."
   });
   gates.push({
     name: "readme-images",
