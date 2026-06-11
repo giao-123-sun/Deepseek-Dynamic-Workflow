@@ -658,10 +658,6 @@ function renderDashboard(workflow: WorkflowView): string {
       gap: 10px;
     }
     .mission-shell {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 260px;
-      gap: 14px;
-      align-items: start;
       margin-bottom: 14px;
     }
     .mission-card,
@@ -675,7 +671,7 @@ function renderDashboard(workflow: WorkflowView): string {
       box-shadow: var(--shadow);
     }
     .mission-card {
-      padding: 18px;
+      padding: 16px 18px;
       overflow: hidden;
     }
     .mission-top {
@@ -697,6 +693,13 @@ function renderDashboard(workflow: WorkflowView): string {
       color: #4c5968;
       font-size: 14px;
       overflow-wrap: anywhere;
+    }
+    .mission-compact .progress-track {
+      height: 9px;
+      margin-top: 14px;
+    }
+    .mission-compact .status-row {
+      margin-top: 12px;
     }
     .mission-progress {
       min-width: 118px;
@@ -767,6 +770,9 @@ function renderDashboard(workflow: WorkflowView): string {
       gap: 14px;
       align-items: start;
     }
+    .canvas-section {
+      margin-top: 14px;
+    }
     .workflow-map-card,
     .inspector-card,
     .learning-card {
@@ -792,31 +798,53 @@ function renderDashboard(workflow: WorkflowView): string {
     .workflow-map {
       display: grid;
       grid-auto-flow: column;
-      grid-auto-columns: minmax(210px, 1fr);
-      gap: 12px;
+      grid-auto-columns: minmax(260px, 1fr);
+      gap: 28px;
       overflow-x: auto;
-      padding: 2px 2px 10px;
+      min-height: 330px;
+      align-items: center;
+      padding: 28px 24px 32px;
       scroll-snap-type: x proximity;
+      border: 1px solid #e6edf4;
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 1px 1px, #d8e2ec 1px, transparent 0) 0 0 / 18px 18px,
+        linear-gradient(180deg, #fbfdff, #f7fafc);
     }
     .phase-column {
       position: relative;
-      min-width: 210px;
+      min-width: 260px;
       border: 1px solid #e2e9f0;
       border-radius: 8px;
       background: linear-gradient(180deg, #ffffff, #f8fbfd);
-      padding: 11px;
+      padding: 14px;
       scroll-snap-align: start;
+      box-shadow: 0 12px 28px rgba(31, 42, 55, 0.08);
     }
     .phase-column::after {
       content: "";
       position: absolute;
-      top: 36px;
-      right: -13px;
-      width: 13px;
+      top: 50%;
+      right: -29px;
+      width: 28px;
       height: 2px;
-      background: #cfdae6;
+      background: #b9c8d8;
+    }
+    .phase-column::before {
+      content: "";
+      position: absolute;
+      top: calc(50% - 4px);
+      right: -31px;
+      width: 8px;
+      height: 8px;
+      border-top: 2px solid #b9c8d8;
+      border-right: 2px solid #b9c8d8;
+      transform: rotate(45deg);
     }
     .phase-column:last-child::after {
+      display: none;
+    }
+    .phase-column:last-child::before {
       display: none;
     }
     .phase-column-head {
@@ -828,6 +856,7 @@ function renderDashboard(workflow: WorkflowView): string {
       align-items: center;
       gap: 7px;
       min-width: 0;
+      min-height: 34px;
       font-weight: 730;
       color: #233044;
     }
@@ -847,20 +876,21 @@ function renderDashboard(workflow: WorkflowView): string {
     }
     .capsule-stack {
       display: grid;
-      gap: 8px;
-      margin-top: 11px;
+      grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+      gap: 9px;
+      margin-top: 14px;
     }
     .agent-capsule {
       position: relative;
       display: grid;
-      grid-template-columns: auto minmax(0, 1fr) auto;
+      grid-template-columns: auto minmax(0, 1fr);
       align-items: center;
       gap: 8px;
-      min-height: 38px;
+      min-height: 44px;
       border: 1px solid #dfe7ef;
-      border-radius: 999px;
+      border-radius: 8px;
       background: #fff;
-      padding: 6px 8px;
+      padding: 8px 10px;
       color: inherit;
       cursor: default;
       outline: none;
@@ -888,6 +918,15 @@ function renderDashboard(workflow: WorkflowView): string {
       font-weight: 700;
       color: #273449;
     }
+    .capsule-hint {
+      display: flex;
+      align-items: center;
+      grid-column: 1 / -1;
+      gap: 5px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1;
+    }
     .capsule-meter {
       width: 36px;
       height: 6px;
@@ -905,15 +944,18 @@ function renderDashboard(workflow: WorkflowView): string {
       position: absolute;
       z-index: 20;
       left: 12px;
-      top: calc(100% + 8px);
+      top: auto;
+      bottom: calc(100% + 8px);
       width: min(340px, calc(100vw - 56px));
       pointer-events: none;
+      display: none;
       opacity: 0;
-      transform: translateY(-4px);
+      transform: translateY(4px);
       transition: opacity 150ms ease, transform 150ms ease;
     }
     .agent-capsule:hover .capsule-preview,
     .agent-capsule:focus-within .capsule-preview {
+      display: block;
       opacity: 1;
       transform: translateY(0);
     }
@@ -1049,6 +1091,27 @@ function renderDashboard(workflow: WorkflowView): string {
       grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
       gap: 14px;
     }
+    .technical-trace {
+      margin-top: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .technical-trace > summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      list-style: none;
+      cursor: pointer;
+      padding: 14px 16px;
+    }
+    .technical-trace > summary::-webkit-details-marker { display: none; }
+    .technical-trace-body {
+      padding: 0 14px 14px;
+    }
     .learning-list {
       display: grid;
       gap: 9px;
@@ -1134,7 +1197,7 @@ function renderDashboard(workflow: WorkflowView): string {
 <body>
   <main>
     <section class="mission-shell" aria-label="Workflow mission">
-      <div class="mission-card">
+      <div class="mission-card mission-compact">
         <div class="eyebrow">${icon("sparkles")} DeepSeek Dynamic Workflow</div>
         <div class="mission-top">
           <div>
@@ -1148,29 +1211,18 @@ function renderDashboard(workflow: WorkflowView): string {
         </div>
         ${renderProgressBar(progress, "progress-track")}
         ${renderStatusSegments(stats)}
-        <div class="mission-stats">
-          ${renderMissionStat("users", "Agents", `${stats.completed}/${stats.agents}`, "active workforce")}
-          ${renderMissionStat("layers", "Phases", `${stats.completedPhases}/${stats.phases}`, "workflow map")}
-          ${renderMissionStat("gauge", "Cache", formatRate(stats.weightedCacheHitRate), `${formatTokens(stats.effectiveTokens)} effective`)}
-          ${renderMissionStat("coins", "Tokens", formatTokens(stats.tokens), `${stats.tools} tools`)}
-          ${renderMissionStat("archive", "Artifacts", `${stats.artifacts}`, "files produced")}
-        </div>
-      </div>
-      <aside class="mission-side">
-        <div>
-          <div class="time-label">${icon("clock")} Runtime</div>
-          <div class="runtime-compact" id="runtime" data-start="${escapeAttr(workflow.startedAt ?? "")}" data-end="${escapeAttr(workflow.endedAt ?? "")}" data-duration="${stats.durationMs}">${formatDuration(stats.durationMs)}</div>
-        </div>
         <div class="status-row">
           ${renderStatusChip(status, labelStatus(String(workflow.status)))}
-          <span class="chip">${icon("calendar")} ${escapeHtml(formatDateTime(generatedAt))}</span>
+          <span class="chip">${icon("users")} ${stats.completed}/${stats.agents} agents</span>
+          <span class="chip">${icon("layers")} ${stats.completedPhases}/${stats.phases} phases</span>
+          <span class="chip">${icon("archive")} ${stats.artifacts} outputs</span>
+          <span class="chip" id="runtime" data-start="${escapeAttr(workflow.startedAt ?? "")}" data-end="${escapeAttr(workflow.endedAt ?? "")}" data-duration="${stats.durationMs}">${icon("clock")} ${formatDuration(stats.durationMs)}</span>
         </div>
-      </aside>
+      </div>
     </section>
 
-    <section class="command-grid" aria-label="Workflow command center">
+    <section class="canvas-section" aria-label="Workflow command center">
       ${renderWorkflowMap(workflow)}
-      ${renderInspector(workflow)}
     </section>
 
     <section class="section story-grid">
@@ -1178,15 +1230,18 @@ function renderDashboard(workflow: WorkflowView): string {
       ${renderLearningPanel(workflow)}
     </section>
 
-    <section class="section">
-      <div class="section-heading">
+    <details class="technical-trace">
+      <summary>
         <div>
-          <h2 class="section-title">Deep trace</h2>
-          <p class="section-kicker">Open a phase when you want the detailed token, tool, cache, and output records.</p>
+          <h2 class="section-title">Technical trace</h2>
+          <p class="section-kicker">Detailed tokens, tools, cache, and per-agent files.</p>
         </div>
+        ${icon("chevron", "chevron")}
+      </summary>
+      <div class="technical-trace-body">
+        ${workflow.phases.map((phase) => renderPhase(phase, false)).join("\n")}
       </div>
-      ${workflow.phases.map((phase, index) => renderPhase(phase, index === 0 || phase.status === "running")).join("\n")}
-    </section>
+    </details>
   </main>
   <script>
     const runtime = document.getElementById('runtime');
@@ -1263,10 +1318,10 @@ function renderWorkflowMap(workflow: WorkflowView): string {
   return `<section class="workflow-map-card">
   <div class="map-header">
     <div>
-      <h2 class="map-title">Workflow map</h2>
-      <p class="section-kicker">Phases move left to right. Hover an agent capsule to preview its work.</p>
+      <h2 class="map-title">Workflow canvas</h2>
+      <p class="section-kicker">The workflow moves left to right. Hover an agent to see what it did.</p>
     </div>
-    <span class="chip">${icon("workflow")} ${workflow.phases.length} phases</span>
+    <span class="chip">${icon("workflow")} live map</span>
   </div>
   <div class="workflow-map">
     ${workflow.phases.map(renderPhaseColumn).join("\n")}
@@ -1276,29 +1331,28 @@ function renderWorkflowMap(workflow: WorkflowView): string {
 
 function renderPhaseColumn(phase: WorkflowPhaseView): string {
   const stats = phaseStats(phase);
-  const maxTokens = Math.max(1, ...phase.agents.map((agent) => agent.tokens));
   return `<article class="phase-column ${escapeAttr(normalizeStatus(phase.status))}">
   <div class="phase-column-head">
     <div class="phase-column-title">${statusIcon(phase.status)} <span title="${escapeAttr(phase.name)}">${escapeHtml(phase.name)}</span></div>
     ${renderProgressBar(stats.progress, "mini-track")}
     <div class="phase-column-meta">
-      <span>${stats.completed}/${stats.agents} agents</span>
-      <span>${formatTokens(stats.tokens)} tokens</span>
+      <span>${stats.completed}/${stats.agents} agents done</span>
+      <span>${formatPercent(stats.progress)}</span>
     </div>
   </div>
   <div class="capsule-stack">
-    ${phase.agents.map((agent) => renderAgentCapsule(agent, maxTokens)).join("\n")}
+    ${phase.agents.map(renderAgentCapsule).join("\n")}
   </div>
 </article>`;
 }
 
-function renderAgentCapsule(agent: WorkflowAgentView, maxTokens: number): string {
+function renderAgentCapsule(agent: WorkflowAgentView): string {
   const status = normalizeStatus(agent.status);
-  const cacheWidth = formatStylePercent(agent.cacheHitRate ?? ratio(agent.tokens, maxTokens));
+  const visual = findVisualArtifact(agent);
   return `<div class="agent-capsule ${escapeAttr(status)}" tabindex="0" aria-label="${escapeAttr(agent.name)}">
   <span class="capsule-dot" aria-hidden="true"></span>
   <span class="capsule-name" title="${escapeAttr(agent.name)}">${escapeHtml(agent.shortName || agent.name)}</span>
-  <span class="capsule-meter" title="Cache reuse ${escapeAttr(formatRate(agent.cacheHitRate))}"><span style="width:${cacheWidth}"></span></span>
+  <span class="capsule-hint">${icon(visual ? "monitor" : "target")} ${visual ? "preview" : labelStatus(agent.status)}</span>
   <div class="capsule-preview">
     ${renderAgentPopover(agent)}
   </div>
