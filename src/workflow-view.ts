@@ -137,6 +137,8 @@ async function buildWorkflowFromRuns(options: {
     const metadata = parseMetadata(context);
     const artifactRoot = session.cwd ? path.resolve(session.cwd) : inferArtifactRoot(runsRoot);
     const manifest = await readArtifactManifest(summary.runDir, artifactRoot);
+    const writtenArtifacts = await collectWrittenArtifacts(session.appendOnlyLog ?? [], artifactRoot);
+    const artifacts = mergeArtifacts([...(manifest?.artifacts ?? []), ...writtenArtifacts]);
 
     if (workflowTag && metadata.workflow !== workflowTag) {
       continue;
@@ -163,7 +165,7 @@ async function buildWorkflowFromRuns(options: {
       cacheHitRate: summary.hitRate,
       createdAt: session.createdAt ?? runStat.mtime.toISOString(),
       artifact: path.relative(runsRoot, summary.runDir).split(path.sep).join("/"),
-      artifacts: manifest?.artifacts ?? []
+      artifacts
     };
 
     const phase = metadata.phase ?? "Adapter MVP Runs";
@@ -186,6 +188,55 @@ async function buildWorkflowFromRuns(options: {
     description: inferredDescription,
     phases
   };
+}
+
+async function collectWrittenArtifacts(
+  log: Array<Record<string, unknown>>,
+  artifactRoot: string
+): Promise<WorkflowArtifactView[]> {
+  const artifacts: WorkflowArtifactView[] = [];
+  for (const entry of log) {
+    if (entry.kind !== "tool_result") continue;
+    const result = entry.result as {
+      tool?: string;
+      status?: string;
+      args?: Record<string, unknown>;
+      content_sha256?: string;
+    } | undefined;
+    if (!result || result.tool !== "write_file" || result.status !== "ok") continue;
+    const artifactPath = typeof result.args?.path === "string" ? result.args.path : "";
+    if (!artifactPath) continue;
+    const artifact: WorkflowArtifactView = {
+      id: path.basename(artifactPath),
+      type: inferArtifactType(artifactPath),
+      path: artifactPath,
+      bytes: typeof result.args?.bytes === "number" ? result.args.bytes : undefined,
+      sha256: result.content_sha256
+    };
+    artifacts.push(await addArtifactPreview(artifact, artifactRoot));
+  }
+  return artifacts;
+}
+
+function mergeArtifacts(artifacts: WorkflowArtifactView[]): WorkflowArtifactView[] {
+  const seen = new Set<string>();
+  const merged: WorkflowArtifactView[] = [];
+  for (const artifact of artifacts) {
+    if (seen.has(artifact.path)) continue;
+    seen.add(artifact.path);
+    merged.push(artifact);
+  }
+  return merged;
+}
+
+function inferArtifactType(artifactPath: string): string {
+  const extension = path.extname(artifactPath).toLowerCase();
+  if (extension === ".md") return "markdown";
+  if (extension === ".json") return "json";
+  if (extension === ".html") return "html";
+  if (extension === ".txt") return "text";
+  if (extension === ".csv") return "csv";
+  return "file";
 }
 
 async function readArtifactManifest(runDir: string, artifactRoot: string): Promise<{
